@@ -75,16 +75,18 @@ public class ElevatorSystem extends EntityTickingSystem<EntityStore> {
             return;
         }
 
+        String elevatorVariant = currentBlock.getId();
+
         if ( states.jumping ) {
             for ( int y = playerY + 2; y < (MAX_WORLD_HEIGHT_POSITION - 2); y++ ) {
-                if ( tryTeleport(world, store, archetypeChunk, index, states, playerX, y, playerZ, playerUUID) ) {
+                if ( tryTeleport(world, store, archetypeChunk, index, states, playerX, y, playerZ, playerUUID, elevatorVariant) ) {
                     states.jumping = false;
                     break;
                 }
             }
         } else if ( states.crouching ) {
             for ( int y = playerY - 2; y > 0; y-- ) {
-                if ( tryTeleport(world, store, archetypeChunk, index, states, playerX, y, playerZ, playerUUID) ) {
+                if ( tryTeleport(world, store, archetypeChunk, index, states, playerX, y, playerZ, playerUUID, elevatorVariant) ) {
                     states.crouching = false;
                     break;
                 }
@@ -92,10 +94,10 @@ public class ElevatorSystem extends EntityTickingSystem<EntityStore> {
         }
     }
 
-    private boolean tryTeleport( World world, Store<EntityStore> store, ArchetypeChunk<EntityStore> chunk, int index, MovementStates states, int x, int y, int z, UUID playerUUID ) {
+    private boolean tryTeleport( World world, Store<EntityStore> store, ArchetypeChunk<EntityStore> chunk, int index, MovementStates states, int x, int y, int z, UUID playerUUID, String elevatorVariant ) {
         BlockType targetBlock = world.getBlockType(x, y, z);
 
-        if ( targetBlock != null && isElevatorBlock(targetBlock.getId()) ) {
+        if ( targetBlock != null && targetBlock.getId().equalsIgnoreCase(elevatorVariant)) {
 
             if ( isObstructed(world, x, y + 1, z) || isObstructed(world, x, y + 2, z) ) {
                 return false;
