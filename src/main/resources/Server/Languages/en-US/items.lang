@@ -1,2 +1,8 @@
 Ender_Elevator_Block.name = Ender Elevator
+Ender_Elevator_Block_Blue.name = Ender Elevator Blue
+Ender_Elevator_Block_Green.name = Ender Elevator Green
+Ender_Elevator_Block_Yellow.name = Ender Elevator Yellow
+Ender_Elevator_Block_Pink.name = Ender Elevator Pink
+Ender_Elevator_Block_Purple.name = Ender Elevator Purple
+Ender_Elevator_Block_Red.name = Ender Elevator Red
 Ender_Elevator_Block.description = Harness the void to travel instantly. Jump to warp up, Crouch to warp down.
