@@ -1,2 +1,2 @@
-elevator.name = Ender Elevator
-elevator.description = A Elevator
+Ender_Elevator_Block.name = Ender Elevator
+Ender_Elevator_Block.description = Harness the void to travel instantly. Jump to warp up, Crouch to warp down.

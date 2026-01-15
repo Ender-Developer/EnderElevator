@@ -1,7 +1,7 @@
 {
     "Group": "EnderElevator",
     "Name": "EnderElevator",
-    "Version": "1.0-Alpha",
+    "Version": "0.0.2",
     "Description": "A mod that introduces an elevator system, allowing dynamic vertical connections between multiple blocks, making exploration and construction much more practical and fluid.. ",
     "Authors": [
         {
@@ -16,7 +16,7 @@
     "Website": "https://github.com/Ender-Developer/EnderElevator",
     "ServerVersion": "*",
     "Dependencies": {
-        
+        "Hytale:EntityModule": "*"
     },
     "OptionalDependencies": {
         
