@@ -1,0 +1,71 @@
+{
+  "TranslationProperties": {
+    "Name": "items.elevator.name",
+    "Description": "items.elevator.description"
+  },
+  "Id": "My_New_Block",
+  "MaxStack": 100,
+  "Icon": "Icons/ItemsGenerated/elevator.png",
+  "Categories": [
+    "Blocks.Rocks"
+  ],
+  "PlayerAnimationsId": "Block",
+  "Set": "Ender_Elevator",
+  "BlockType": {
+    "Material": "Solid",
+    "DrawType": "Cube",
+    "Group": "Stone",
+    "Flags": {},
+    "Gathering": {
+      "Breaking": {
+        "GatherType": "Rocks",
+        "ItemId": "my_new_block"
+      }
+    },
+    "BlockParticleSetId": "Stone",
+    "Textures": [
+      {
+        "All": "BlockTextures/Ender_Elevator_Block_White.png"
+      }
+    ],
+    "ParticleColor": "#aeae8c",
+    "BlockSoundSetId": "Stone",
+    "BlockBreakingDecalId": "Breaking_Decals_Rock",
+    "CubeShadingMode": "Standard"
+  },
+  "IconProperties": {
+    "Scale": 0.58823,
+    "Rotation": [
+      22.5,
+      45,
+      22.5
+    ],
+    "Translation": [
+      0,
+      -13.5
+    ]
+  },
+  "Recipe": {
+    "Input": [
+      {
+        "ItemId": "Cloth_Block_Wool_White",
+        "Quantity": 8
+      },
+      {
+        "ItemId": "Ingredient_Life_Essence",
+        "Quantity": 1
+      }
+    ],
+    "OutputQuantity": 1,
+    "BenchRequirement": [
+      {
+        "Id": "Furniture_Bench",
+        "Type": "Crafting",
+        "Categories": [
+          "Furniture_Textiles"
+        ]
+      }
+    ],
+    "TimeSeconds": 4
+  }
+}
