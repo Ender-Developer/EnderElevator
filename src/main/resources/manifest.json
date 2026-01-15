@@ -1,0 +1,27 @@
+{
+    "Group": "EnderElevator",
+    "Name": "EnderElevator",
+    "Version": "0.0.2",
+    "Description": "A mod that introduces an elevator system, allowing dynamic vertical connections between multiple blocks, making exploration and construction much more practical and fluid.. ",
+    "Authors": [
+        {
+            "Name": "Nykoo",
+            "Github": "https://github.com/Nxkoo"
+        },
+        {
+            "Name": "MrJoao",
+            "Github": "https://github.com/joaoalberis"
+        }
+    ],
+    "Website": "https://github.com/Ender-Developer/EnderElevator",
+    "ServerVersion": "*",
+    "Dependencies": {
+        
+    },
+    "OptionalDependencies": {
+        
+    },
+    "DisabledByDefault": false,
+    "Main": "com.github.enderdeveloper.Main",
+    "IncludesAssetPack": true
+}
