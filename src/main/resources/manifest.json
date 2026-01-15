@@ -1,7 +1,7 @@
 {
     "Group": "EnderElevator",
     "Name": "EnderElevator",
-    "Version": "0.0.2",
+    "Version": "1.0-Alpha",
     "Description": "A mod that introduces an elevator system, allowing dynamic vertical connections between multiple blocks, making exploration and construction much more practical and fluid.. ",
     "Authors": [
         {
