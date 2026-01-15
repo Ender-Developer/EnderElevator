@@ -28,10 +28,11 @@
         "All": "BlockTextures/Ender_Elevator_Block.png"
       }
     ],
-    "ParticleColor": "#aeae8c",
+    "ParticleColor": "#f3f3ee",
     "BlockSoundSetId": "Stone",
     "BlockBreakingDecalId": "Breaking_Decals_Rock",
-    "CubeShadingMode": "Standard"
+    "CubeShadingMode": "Standard",
+    "RequiresAlphaBlending": true
   },
   "IconProperties": {
     "Scale": 0.58823,

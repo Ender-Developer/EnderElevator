@@ -1,11 +1,11 @@
 {
   "TranslationProperties": {
-    "Name": "items.Ender_Elevator_Block_Purple.name",
+    "Name": "items.Ender_Elevator_Block_Cyan.name",
     "Description": "items.Ender_Elevator_Block.description"
   },
   "Id": "My_New_Block",
   "MaxStack": 100,
-  "Icon": "Icons/ItemsGenerated/Ender_Elevator_Block_Purple.png",
+  "Icon": "Icons/ItemsGenerated/Ender_Elevator_Block_Cyan.png",
   "Categories": [
     "Blocks.Rocks"
   ],
@@ -28,14 +28,14 @@
         "All": "BlockTextures/Ender_Elevator_Block.png"
       }
     ],
-    "ParticleColor": "#9B50DB",
+    "ParticleColor": "#5CBEE0",
     "BlockSoundSetId": "Stone",
     "BlockBreakingDecalId": "Breaking_Decals_Rock",
     "CubeShadingMode": "Standard",
-    "RequiresAlphaBlending": true,
     "Tint": [
-      "#9B50DB"
-    ]
+      "#5CBEE0"
+    ],
+    "RequiresAlphaBlending": true
   },
   "IconProperties": {
     "Scale": 0.58823,
@@ -56,7 +56,7 @@
         "Quantity": 1
       },
       {
-        "ItemId": "Plant_Flower_Common_Purple",
+        "ItemId": "Plant_Flower_Tall_Cyan2",
         "Quantity": 1
       }
     ],

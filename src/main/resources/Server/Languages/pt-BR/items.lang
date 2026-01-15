@@ -1,0 +1,13 @@
+Ender_Elevator_Block.name = Ender Elevator
+Ender_Elevator_Block_Blue.name = Ender Elevator Azul
+Ender_Elevator_Block_Green.name = Ender Elevator Verde
+Ender_Elevator_Block_Yellow.name = Ender Elevator Amarelo
+Ender_Elevator_Block_Pink.name = Ender Elevator Rosa
+Ender_Elevator_Block_Purple.name = Ender Elevator Púrpura
+Ender_Elevator_Block_Red.name = Ender Elevator Vermelho
+Ender_Elevator_Block_Black.name = Ender Elevator Preto
+Ender_Elevator_Block_Orange.name = Ender Elevator Laranja
+Ender_Elevator_Block_Cyan.name = Ender Elevator Ciano
+Ender_Elevator_Block_Violet.name = Ender Elevator Violeta
+Ender_Elevator_Block_Brown.name = Ender Elevator Marrom
+Ender_Elevator_Block.description = Aproveite o vazio para viajar instantaneamente. Salte para se teletransportar para cima, agache-se para se teletransportar para baixo.
