@@ -19,7 +19,8 @@
     "Gathering": {
       "Breaking": {
         "GatherType": "Rocks",
-        "ItemId": "my_new_block"
+        "ItemId": "Ender_Elevator_Block_Blue",
+        "DropList": {}
       }
     },
     "BlockParticleSetId": "Stone",

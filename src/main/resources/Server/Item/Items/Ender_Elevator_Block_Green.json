@@ -19,7 +19,7 @@
     "Gathering": {
       "Breaking": {
         "GatherType": "Rocks",
-        "ItemId": "my_new_block"
+        "ItemId": "Ender_Elevator_Block_Green"
       }
     },
     "BlockParticleSetId": "Stone",
@@ -28,7 +28,7 @@
         "All": "BlockTextures/Ender_Elevator_Block.png"
       }
     ],
-    "ParticleColor": "#334cb2",
+    "ParticleColor": "#667f33",
     "BlockSoundSetId": "Stone",
     "BlockBreakingDecalId": "Breaking_Decals_Rock",
     "CubeShadingMode": "Standard",
