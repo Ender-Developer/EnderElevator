@@ -50,4 +50,6 @@ We welcome contributions! Please feel free to verify the `manifest.json` for dep
 * **Nykoo** - [GitHub](https://github.com/Nxkoo)
 * **MrJoao** - [GitHub](https://github.com/joaoalberis)
 
+[Download at Curseforge](https://www.curseforge.com/hytale/mods/enderelevator)
+
 ---
