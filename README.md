@@ -1,6 +1,6 @@
 # EnderElevator
 
-![Version](https://img.shields.io/badge/Version-1.0.0-blue) ![Hytale](https://img.shields.io/badge/Game-Hytale-orange)
+![Version](https://img.shields.io/badge/Version-1.1.2-blue) ![Hytale](https://img.shields.io/badge/Game-Hytale-orange)
 ![Tested On](https://img.shields.io/badge/Tested%20On-HytaleServer%20v2026.01.17--a4cc0e7dd-green)
 
 **EnderElevator** is a Hytale mod that introduces a dynamic elevator system, allowing for practical and fluid vertical transportation between floors.
