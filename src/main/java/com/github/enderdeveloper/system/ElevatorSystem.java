@@ -109,7 +109,7 @@ public class ElevatorSystem extends EntityTickingSystem<EntityStore> {
             states.onGround = true;
 
             world.execute(() -> {
-                Teleport teleport = new Teleport(new Transform(targetX, targetY, targetZ));
+                Teleport teleport = Teleport.createForPlayer(world, new Transform(targetX, targetY, targetZ));
                 store.addComponent(chunk.getReferenceTo(index), Teleport.getComponentType(), teleport);
             });
 
