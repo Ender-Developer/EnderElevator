@@ -1,6 +1,6 @@
 # EnderElevator
 
-![Version](https://img.shields.io/badge/Version-1.1.2-blue) ![Hytale](https://img.shields.io/badge/Game-Hytale-orange)
+![Version](https://img.shields.io/badge/Version-1.1.3-blue) ![Hytale](https://img.shields.io/badge/Game-Hytale-orange)
 ![Tested On](https://img.shields.io/badge/Tested%20On-HytaleServer%20v2026.01.17--a4cc0e7dd-green)
 
 **EnderElevator** is a Hytale mod that introduces a dynamic elevator system, allowing for practical and fluid vertical transportation between floors.
@@ -26,17 +26,17 @@ All Ender Elevator variants are crafted using the **Furniture Bench** (Textiles 
 ### Colored Variations
 To create a specific color, combine **1x Ender Elevator** with the corresponding item:
 
-* **Yellow:** Ender Elevator + Dandelion
-* **Purple:** Ender Elevator + Purple Arid Flower
-* **Red:** Ender Elevator + Poppy
-* **Orange:** Ender Elevator + Common Orange Flower
-* **Cyan:** Ender Elevator + Cyan Flower
-* **Violet:** Ender Elevator + Violets
-* **Brown:** Ender Elevator + Brown Cap Mushroom
-* **Pink:** Ender Elevator + Common Pink Flower
-* **Green:** Ender Elevator + Nettle
-* **Black:** Ender Elevator + Black Orchid
-* **Blue:** Ender Elevator + Blue Waterlily
+* **Yellow:** Ender Elevator + Petals Yellow
+* **Purple:** Ender Elevator + Petals Purple
+* **Red:** Ender Elevator + Petals Red
+* **Orange:** Ender Elevator + Petals Yellow + Petals Red
+* **Cyan:** Ender Elevator + Petals Cyan
+* **Violet:** Ender Elevator + Petals Purple + Petals Blue
+* **Brown:** Ender Elevator + Petals Red + Petals Green
+* **Pink:** Ender Elevator + Petals Pink
+* **Green:** Ender Elevator + Petals Green
+* **Black:** Ender Elevator + Petals Red + Petals Blue + Petals Yellow
+* **Blue:** Ender Elevator + Petals Blue
 
 ## 📦 Installation
 

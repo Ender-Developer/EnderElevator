@@ -56,8 +56,11 @@
         "Quantity": 1
       },
       {
-        "ItemId": "Plant_Crop_Mushroom_Cap_Brown",
+        "ItemId": "Plant_Petals_Red",
         "Quantity": 1
+      },
+      {
+        "ItemId": "Plant_Petals_Green"
       }
     ],
     "OutputQuantity": 1,

@@ -56,8 +56,14 @@
         "Quantity": 1
       },
       {
-        "ItemId": "Plant_Flower_Orchid_Poisoned",
+        "ItemId": "Plant_Petals_Red",
         "Quantity": 1
+      },
+      {
+        "ItemId": "Plant_Petals_Blue"
+      },
+      {
+        "ItemId": "Plant_Petals_Yellow"
       }
     ],
     "OutputQuantity": 1,
