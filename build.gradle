@@ -4,7 +4,7 @@ plugins {
 }
 
 ext {
-    hytaleHome = "${System.getProperty("user.home")}/AppData/Roaming/Hytale"
+    hytaleHome = "D:\\Program Files\\Hypixel Studios\\Hytale"
 }
 
 java {
@@ -58,9 +58,13 @@ idea.project.settings.runConfigurations {
     'HytaleServer'(org.jetbrains.gradle.ext.Application) {
         mainClass = 'com.hypixel.hytale.Main'
         moduleName = project.idea.module.name + '.main'
-        programParameters = "--allow-op --assets=$hytaleHome/install/$patchline/package/game/latest/Assets.zip"
+        programParameters = "--allow-op --assets=\"$hytaleHome/install/$patchline/package/game/latest/Assets.zip\""
         if (includes_pack.toBoolean()) {
-            programParameters += " --mods=${sourceSets.main.java.srcDirs.first().parentFile.absolutePath}"
+            // Point to src/main and Hytale will find 'resources' folder.
+            // If Hytale expects mod folder name to match mod name, 
+            // we should ideally rename 'resources' or use a symlink, 
+            // but first let's try pointing to src/main again with fixed UI code.
+            programParameters += " --mods=${file('src/main').absolutePath}"
         }
         if (load_user_mods.toBoolean()) {
             programParameters += " --mods=$hytaleHome/UserData/Mods"

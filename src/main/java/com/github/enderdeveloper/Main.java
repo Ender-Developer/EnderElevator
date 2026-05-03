@@ -1,9 +1,12 @@
 package com.github.enderdeveloper;
 
+import com.github.enderdeveloper.component.ElevatorComponent;
+import com.github.enderdeveloper.config.ElevatorConfig;
 import com.github.enderdeveloper.system.ElevatorSystem;
 import com.hypixel.hytale.logger.HytaleLogger;
 import com.hypixel.hytale.server.core.plugin.JavaPlugin;
 import com.hypixel.hytale.server.core.plugin.JavaPluginInit;
+import com.hypixel.hytale.server.core.util.Config;
 
 import javax.annotation.Nonnull;
 import java.text.SimpleDateFormat;
@@ -11,17 +14,21 @@ import java.util.Date;
 
 public class Main extends JavaPlugin {
 
-    public static HytaleLogger LOGGER = HytaleLogger.get("EnderDev");
+    private static final HytaleLogger LOGGER = HytaleLogger.forEnclosingClass();
+    private final Config<ElevatorConfig> config;
 
     public Main(@Nonnull JavaPluginInit init) {
         super(init);
+        this.config = this.withConfig(ElevatorConfig.CODEC);
     }
 
     @Override
     protected void setup() {
         super.setup();
 
-        this.getEntityStoreRegistry().registerSystem(new ElevatorSystem());
+        this.config.save();
+        ElevatorComponent.setComponentType(this.getEntityStoreRegistry().registerComponent(ElevatorComponent.class, ElevatorComponent::new));
+        this.getEntityStoreRegistry().registerSystem(new ElevatorSystem(this.config.get()));
 
         String currentlyYear = (new SimpleDateFormat("yyyy")).format(new Date());
         LOGGER.atInfo().log("=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=");
