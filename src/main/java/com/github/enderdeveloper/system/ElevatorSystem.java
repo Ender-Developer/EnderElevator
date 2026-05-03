@@ -9,6 +9,7 @@ import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.component.query.Query;
 import com.hypixel.hytale.component.system.tick.EntityTickingSystem;
 import com.hypixel.hytale.logger.HytaleLogger;
+import com.hypixel.hytale.math.util.ChunkUtil;
 import com.hypixel.hytale.math.vector.Transform;
 import com.hypixel.hytale.protocol.MovementStates;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.BlockType;
@@ -58,6 +59,12 @@ public class ElevatorSystem extends EntityTickingSystem<EntityStore> {
         int playerY = (int) Math.floor(pos.y - 1);
         int playerZ = (int) Math.floor(pos.z);
 
+        // FIX: Ensure chunk is ticking before calling getBlockType to avoid IllegalStateException (Store is currently processing)
+        long chunkIndex = ChunkUtil.indexChunkFromBlock(playerX, playerZ);
+        if (world.getChunkIfLoaded(chunkIndex) == null) {
+            return;
+        }
+
         BlockType currentBlock = world.getBlockType(playerX, playerY, playerZ);
         if (currentBlock == null || !isElevatorBlock(currentBlock.getId())) {
             return;
@@ -77,14 +84,16 @@ public class ElevatorSystem extends EntityTickingSystem<EntityStore> {
         String elevatorVariant = currentBlock.getId();
 
         if (states.jumping) {
-            for (int y = playerY + 2; y < (config.getMaxSearchDistance()); y++) {
+            int maxY = Math.min(playerY + config.getMaxSearchDistance(), 318);
+            for (int y = playerY + 2; y <= maxY; y++) {
                 if (tryTeleport(world, store, archetypeChunk, index, states, playerX, y, playerZ, elevatorVariant, commandBuffer)) {
                     states.jumping = false;
                     break;
                 }
             }
         } else if (states.crouching) {
-            for (int y = playerY - 2; y > 0; y--) {
+            int minY = Math.max(playerY - config.getMaxSearchDistance(), 1);
+            for (int y = playerY - 2; y >= minY; y--) {
                 if (tryTeleport(world, store, archetypeChunk, index, states, playerX, y, playerZ, elevatorVariant, commandBuffer)) {
                     states.crouching = false;
                     break;
