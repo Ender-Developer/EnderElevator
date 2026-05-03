@@ -2,6 +2,7 @@ package com.github.enderdeveloper.system;
 
 import com.github.enderdeveloper.component.ElevatorComponent;
 import com.github.enderdeveloper.config.ElevatorConfig;
+import com.hypixel.hytale.builtin.adventure.camera.asset.camerashake.CameraShake;
 import com.hypixel.hytale.component.ArchetypeChunk;
 import com.hypixel.hytale.component.CommandBuffer;
 import com.hypixel.hytale.component.ComponentType;
@@ -11,13 +12,18 @@ import com.hypixel.hytale.component.system.tick.EntityTickingSystem;
 import com.hypixel.hytale.logger.HytaleLogger;
 import com.hypixel.hytale.math.util.ChunkUtil;
 import com.hypixel.hytale.math.vector.Transform;
+import com.hypixel.hytale.protocol.AccumulationMode;
 import com.hypixel.hytale.protocol.MovementStates;
+import com.hypixel.hytale.protocol.SoundCategory;
+import com.hypixel.hytale.protocol.packets.camera.CameraShakeEffect;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.BlockType;
+import com.hypixel.hytale.server.core.asset.type.soundevent.config.SoundEvent;
 import com.hypixel.hytale.server.core.entity.entities.Player;
 import com.hypixel.hytale.server.core.entity.movement.MovementStatesComponent;
 import com.hypixel.hytale.server.core.modules.entity.component.TransformComponent;
 import com.hypixel.hytale.server.core.modules.entity.teleport.Teleport;
 import com.hypixel.hytale.server.core.universe.PlayerRef;
+import com.hypixel.hytale.server.core.universe.world.SoundUtil;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import org.checkerframework.checker.nullness.compatqual.NonNullDecl;
@@ -33,6 +39,10 @@ public class ElevatorSystem extends EntityTickingSystem<EntityStore> {
     private final ComponentType<EntityStore, TransformComponent> transformType;
     private final Query<EntityStore> query;
 
+    // Asset indices
+    private final int teleportSoundIndex;
+    private final int cameraShakeIndex;
+
     public ElevatorSystem(ElevatorConfig config) {
         this.config = config;
         this.movementType = MovementStatesComponent.getComponentType();
@@ -42,6 +52,10 @@ public class ElevatorSystem extends EntityTickingSystem<EntityStore> {
                 movementType,
                 transformType
         );
+
+        // Pre-fetch asset indices for performance using modern Hytale 2.0 APIs
+        this.teleportSoundIndex = SoundEvent.getAssetMap().getIndex("SFX_Portal_Neutral_Teleport_Local");
+        this.cameraShakeIndex = CameraShake.getAssetMap().getIndex("Impact_Light");
     }
 
     @Override
@@ -59,7 +73,6 @@ public class ElevatorSystem extends EntityTickingSystem<EntityStore> {
         int playerY = (int) Math.floor(pos.y - 1);
         int playerZ = (int) Math.floor(pos.z);
 
-        // FIX: Ensure chunk is ticking before calling getBlockType to avoid IllegalStateException (Store is currently processing)
         long chunkIndex = ChunkUtil.indexChunkFromBlock(playerX, playerZ);
         if (world.getChunkIfLoaded(chunkIndex) == null) {
             return;
@@ -86,7 +99,7 @@ public class ElevatorSystem extends EntityTickingSystem<EntityStore> {
         if (states.jumping) {
             int maxY = Math.min(playerY + config.getMaxSearchDistance(), 318);
             for (int y = playerY + 2; y <= maxY; y++) {
-                if (tryTeleport(world, store, archetypeChunk, index, states, playerX, y, playerZ, elevatorVariant, commandBuffer)) {
+                if (tryTeleport(world, store, archetypeChunk, index, states, playerX, y, playerZ, elevatorVariant, commandBuffer, playerRef)) {
                     states.jumping = false;
                     break;
                 }
@@ -94,7 +107,7 @@ public class ElevatorSystem extends EntityTickingSystem<EntityStore> {
         } else if (states.crouching) {
             int minY = Math.max(playerY - config.getMaxSearchDistance(), 1);
             for (int y = playerY - 2; y >= minY; y--) {
-                if (tryTeleport(world, store, archetypeChunk, index, states, playerX, y, playerZ, elevatorVariant, commandBuffer)) {
+                if (tryTeleport(world, store, archetypeChunk, index, states, playerX, y, playerZ, elevatorVariant, commandBuffer, playerRef)) {
                     states.crouching = false;
                     break;
                 }
@@ -102,7 +115,7 @@ public class ElevatorSystem extends EntityTickingSystem<EntityStore> {
         }
     }
 
-    private boolean tryTeleport(World world, Store<EntityStore> store, ArchetypeChunk<EntityStore> chunk, int index, MovementStates states, int x, int y, int z, String elevatorVariant, CommandBuffer<EntityStore> commandBuffer) {
+    private boolean tryTeleport(World world, Store<EntityStore> store, ArchetypeChunk<EntityStore> chunk, int index, MovementStates states, int x, int y, int z, String elevatorVariant, CommandBuffer<EntityStore> commandBuffer, PlayerRef playerRef) {
         BlockType targetBlock = world.getBlockType(x, y, z);
 
         if (targetBlock != null && targetBlock.getId().equalsIgnoreCase(elevatorVariant)) {
@@ -121,10 +134,25 @@ public class ElevatorSystem extends EntityTickingSystem<EntityStore> {
                 store.addComponent(chunk.getReferenceTo(index), Teleport.getComponentType(), teleport);
             });
 
+            // Immersive Effects
+            applyEffects(playerRef);
             applyCooldown(chunk, index, commandBuffer);
+
             return true;
         }
         return false;
+    }
+
+    private void applyEffects(PlayerRef playerRef) {
+        // Play teleport sound directly to the player for instant feedback
+        if (teleportSoundIndex != 0) {
+            SoundUtil.playSoundEvent2dToPlayer(playerRef, teleportSoundIndex, SoundCategory.UI, 0.8F, 1.2F);
+        }
+
+        // Apply slight camera shake for immersion (simulating the 'warp' feel)
+        if (cameraShakeIndex != 0) {
+            playerRef.getPacketHandler().write(new CameraShakeEffect(cameraShakeIndex, 0.5F, AccumulationMode.Set));
+        }
     }
 
     private boolean isElevatorBlock(String blockId) {
