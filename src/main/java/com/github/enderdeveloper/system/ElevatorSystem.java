@@ -6,6 +6,7 @@ import com.hypixel.hytale.builtin.adventure.camera.asset.camerashake.CameraShake
 import com.hypixel.hytale.component.ArchetypeChunk;
 import com.hypixel.hytale.component.CommandBuffer;
 import com.hypixel.hytale.component.ComponentType;
+import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.component.query.Query;
 import com.hypixel.hytale.component.system.tick.EntityTickingSystem;
@@ -39,9 +40,10 @@ public class ElevatorSystem extends EntityTickingSystem<EntityStore> {
     private final ComponentType<EntityStore, TransformComponent> transformType;
     private final Query<EntityStore> query;
 
-    // Asset indices
-    private final int teleportSoundIndex;
-    private final int cameraShakeIndex;
+    // Asset indices (lazy loaded)
+    private int teleportSoundIndex = 0;
+    private int cameraShakeIndex = 0;
+    private boolean indicesInitialized = false;
 
     public ElevatorSystem(ElevatorConfig config) {
         this.config = config;
@@ -52,14 +54,28 @@ public class ElevatorSystem extends EntityTickingSystem<EntityStore> {
                 movementType,
                 transformType
         );
+    }
 
-        // Pre-fetch asset indices for performance using modern Hytale 2.0 APIs
-        this.teleportSoundIndex = SoundEvent.getAssetMap().getIndex("SFX_Portal_Neutral_Teleport_Local");
-        this.cameraShakeIndex = CameraShake.getAssetMap().getIndex("Impact_Light");
+    private void ensureIndicesInitialized() {
+        if (indicesInitialized) return;
+
+        // Try to get indices. In 2026 pre-release, some registries load late.
+        int soundIdx = SoundEvent.getAssetMap().getIndex("SFX/Magic/Portals/SFX_Portal_Neutral_Teleport_Local");
+        int shakeIdx = CameraShake.getAssetMap().getIndex("Impact/Impact_Light");
+
+        // If we found them, stop trying every tick.
+        if (soundIdx != Integer.MIN_VALUE && shakeIdx != Integer.MIN_VALUE) {
+            this.teleportSoundIndex = soundIdx;
+            this.cameraShakeIndex = shakeIdx;
+            this.indicesInitialized = true;
+            LOGGER.atInfo().log("Elevator Effects Indexed - Sound: %d, Shake: %d", teleportSoundIndex, cameraShakeIndex);
+        }
     }
 
     @Override
     public void tick(float dt, int index, @NonNullDecl ArchetypeChunk<EntityStore> archetypeChunk, @NonNullDecl Store<EntityStore> store, @NonNullDecl CommandBuffer<EntityStore> commandBuffer) {
+        ensureIndicesInitialized();
+
         PlayerRef playerRef = archetypeChunk.getComponent(index, PlayerRef.getComponentType());
         if (playerRef == null) return;
 
@@ -127,14 +143,12 @@ public class ElevatorSystem extends EntityTickingSystem<EntityStore> {
             double targetY = y + 1.2;
             double targetZ = z + 0.5;
 
+            Ref<EntityStore> entityRef = chunk.getReferenceTo(index);
+            Teleport teleport = Teleport.createForPlayer(world, new Transform(targetX, targetY, targetZ));
+            commandBuffer.addComponent(entityRef, Teleport.getComponentType(), teleport);
+
             states.onGround = true;
 
-            world.execute(() -> {
-                Teleport teleport = Teleport.createForPlayer(world, new Transform(targetX, targetY, targetZ));
-                store.addComponent(chunk.getReferenceTo(index), Teleport.getComponentType(), teleport);
-            });
-
-            // Immersive Effects
             applyEffects(playerRef);
             applyCooldown(chunk, index, commandBuffer);
 
@@ -144,14 +158,12 @@ public class ElevatorSystem extends EntityTickingSystem<EntityStore> {
     }
 
     private void applyEffects(PlayerRef playerRef) {
-        // Play teleport sound directly to the player for instant feedback
-        if (teleportSoundIndex != 0) {
-            SoundUtil.playSoundEvent2dToPlayer(playerRef, teleportSoundIndex, SoundCategory.UI, 0.8F, 1.2F);
+        if (teleportSoundIndex != 0 && teleportSoundIndex != Integer.MIN_VALUE) {
+            SoundUtil.playSoundEvent2dToPlayer(playerRef, teleportSoundIndex, SoundCategory.UI, 1.0F, 1.0F);
         }
 
-        // Apply slight camera shake for immersion (simulating the 'warp' feel)
-        if (cameraShakeIndex != 0) {
-            playerRef.getPacketHandler().write(new CameraShakeEffect(cameraShakeIndex, 0.5F, AccumulationMode.Set));
+        if (cameraShakeIndex != 0 && cameraShakeIndex != Integer.MIN_VALUE) {
+            playerRef.getPacketHandler().write(new CameraShakeEffect(cameraShakeIndex, 1.0F, AccumulationMode.Set));
         }
     }
 

@@ -14,7 +14,7 @@
         }
     ],
     "Website": "https://github.com/Ender-Developer/EnderElevator",
-    "ServerVersion": "*",
+    "ServerVersion": "2026.04.30-b4f6a911e",
     "Dependencies": {
         "Hytale:EntityModule": "*"
     },
