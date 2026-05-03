@@ -1,6 +1,7 @@
 package com.github.enderdeveloper.system;
 
 import com.github.enderdeveloper.component.ElevatorComponent;
+import com.github.enderdeveloper.component.SmoothingComponent;
 import com.github.enderdeveloper.config.ElevatorConfig;
 import com.hypixel.hytale.builtin.adventure.camera.asset.camerashake.CameraShake;
 import com.hypixel.hytale.component.ArchetypeChunk;
@@ -121,7 +122,7 @@ public class ElevatorSystem extends EntityTickingSystem<EntityStore> {
         if (states.jumping) {
             int maxY = Math.min(playerY + config.getMaxSearchDistance(), 318);
             for (int y = playerY + 2; y <= maxY; y++) {
-                if (tryTeleport(world, store, archetypeChunk, index, states, playerX, y, playerZ, elevatorVariant, commandBuffer, playerRef)) {
+                if (tryTeleport(world, store, archetypeChunk, index, states, playerX, y, playerZ, elevatorVariant, commandBuffer, playerRef, transformComp)) {
                     states.jumping = false;
                     break;
                 }
@@ -129,7 +130,7 @@ public class ElevatorSystem extends EntityTickingSystem<EntityStore> {
         } else if (states.crouching) {
             int minY = Math.max(playerY - config.getMaxSearchDistance(), 1);
             for (int y = playerY - 2; y >= minY; y--) {
-                if (tryTeleport(world, store, archetypeChunk, index, states, playerX, y, playerZ, elevatorVariant, commandBuffer, playerRef)) {
+                if (tryTeleport(world, store, archetypeChunk, index, states, playerX, y, playerZ, elevatorVariant, commandBuffer, playerRef, transformComp)) {
                     states.crouching = false;
                     break;
                 }
@@ -137,7 +138,7 @@ public class ElevatorSystem extends EntityTickingSystem<EntityStore> {
         }
     }
 
-    private boolean tryTeleport(World world, Store<EntityStore> store, ArchetypeChunk<EntityStore> chunk, int index, MovementStates states, int x, int y, int z, String elevatorVariant, CommandBuffer<EntityStore> commandBuffer, PlayerRef playerRef) {
+    private boolean tryTeleport(World world, Store<EntityStore> store, ArchetypeChunk<EntityStore> chunk, int index, MovementStates states, int x, int y, int z, String elevatorVariant, CommandBuffer<EntityStore> commandBuffer, PlayerRef playerRef, TransformComponent transformComp) {
         BlockType targetBlock = world.getBlockType(x, y, z);
 
         if (targetBlock != null && targetBlock.getId().equalsIgnoreCase(elevatorVariant)) {
@@ -145,13 +146,18 @@ public class ElevatorSystem extends EntityTickingSystem<EntityStore> {
                 return false;
             }
 
-            double targetX = x + 0.5;
-            double targetY = y + 1.2;
-            double targetZ = z + 0.5;
-
+            Vector3d targetPos = new Vector3d(x + 0.5, y + 1.2, z + 0.5);
             Ref<EntityStore> entityRef = chunk.getReferenceTo(index);
-            Teleport teleport = Teleport.createForPlayer(world, new Transform(targetX, targetY, targetZ));
-            commandBuffer.addComponent(entityRef, Teleport.getComponentType(), teleport);
+
+            if (config.isEnableSmoothMovement()) {
+                // Add Smoothing Component for gradual movement
+                commandBuffer.addComponent(entityRef, SmoothingComponent.getComponentType(), 
+                    new SmoothingComponent(transformComp.getPosition(), targetPos, config.getSmoothingSpeed()));
+            } else {
+                // Instant Teleport
+                Teleport teleport = Teleport.createForPlayer(world, new Transform(targetPos, new com.hypixel.hytale.math.vector.Rotation3f()));
+                commandBuffer.addComponent(entityRef, Teleport.getComponentType(), teleport);
+            }
 
             states.onGround = true;
 
@@ -164,11 +170,11 @@ public class ElevatorSystem extends EntityTickingSystem<EntityStore> {
     }
 
     private void applyEffects(PlayerRef playerRef) {
-        if (teleportSoundIndex != 0 && teleportSoundIndex != Integer.MIN_VALUE) {
+        if (config.isEnableSound() && teleportSoundIndex != 0 && teleportSoundIndex != Integer.MIN_VALUE) {
             SoundUtil.playSoundEvent2dToPlayer(playerRef, teleportSoundIndex, SoundCategory.UI, 1.0F, 1.0F);
         }
 
-        if (cameraShakeIndex != 0 && cameraShakeIndex != Integer.MIN_VALUE) {
+        if (config.isEnableShake() && cameraShakeIndex != 0 && cameraShakeIndex != Integer.MIN_VALUE) {
             playerRef.getPacketHandler().write(new CameraShakeEffect(cameraShakeIndex, 1.0F, AccumulationMode.Set));
         }
     }
