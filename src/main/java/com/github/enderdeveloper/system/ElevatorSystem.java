@@ -59,16 +59,22 @@ public class ElevatorSystem extends EntityTickingSystem<EntityStore> {
     private void ensureIndicesInitialized() {
         if (indicesInitialized) return;
 
-        // Try to get indices. In 2026 pre-release, some registries load late.
-        int soundIdx = SoundEvent.getAssetMap().getIndex("SFX/Magic/Portals/SFX_Portal_Neutral_Teleport_Local");
-        int shakeIdx = CameraShake.getAssetMap().getIndex("Impact/Impact_Light");
+        // Try different path patterns common in Hytale 2.0
+        int soundIdx = SoundEvent.getAssetMap().getIndex("SFX_Portal_Neutral_Teleport_Local");
+        if (soundIdx == Integer.MIN_VALUE) {
+            soundIdx = SoundEvent.getAssetMap().getIndex("SFX.Magic.Portals.SFX_Portal_Neutral_Teleport_Local");
+        }
+        
+        int shakeIdx = CameraShake.getAssetMap().getIndex("Impact_Light");
+        if (shakeIdx == Integer.MIN_VALUE) {
+            shakeIdx = CameraShake.getAssetMap().getIndex("Impact.Impact_Light");
+        }
 
-        // If we found them, stop trying every tick.
         if (soundIdx != Integer.MIN_VALUE && shakeIdx != Integer.MIN_VALUE) {
             this.teleportSoundIndex = soundIdx;
             this.cameraShakeIndex = shakeIdx;
             this.indicesInitialized = true;
-            LOGGER.atInfo().log("Elevator Effects Indexed - Sound: %d, Shake: %d", teleportSoundIndex, cameraShakeIndex);
+            LOGGER.atInfo().log("Elevator Effects Successfully Indexed!");
         }
     }
 
