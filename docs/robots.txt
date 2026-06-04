@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://ender-developer.github.io/EnderElevator/sitemap.xml

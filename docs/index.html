@@ -1,0 +1,212 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>EnderElevator - Hytale Mod Wiki</title>
+  <meta name="description" content="Vertical travel, powered by ender magic. Download EnderElevator and read the official wiki for installation, recipes, configuration, and development notes.">
+  <link rel="canonical" href="https://ender-developer.github.io/EnderElevator/">
+  <link rel="alternate" hreflang="en" href="https://ender-developer.github.io/EnderElevator/">
+  <link rel="alternate" hreflang="pt-br" href="https://ender-developer.github.io/EnderElevator/pt-br/">
+  <link rel="alternate" hreflang="es" href="https://ender-developer.github.io/EnderElevator/es/">
+  <link rel="alternate" hreflang="x-default" href="https://ender-developer.github.io/EnderElevator/">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="EnderElevator - Hytale Mod Wiki">
+  <meta property="og:description" content="Vertical travel, powered by ender magic. Download EnderElevator and read the official wiki for installation, recipes, configuration, and development notes.">
+  <meta property="og:url" content="https://ender-developer.github.io/EnderElevator/">
+  <meta property="og:site_name" content="EnderElevator Codex">
+  <meta property="og:locale" content="en_US">
+  <meta property="og:image" content="https://ender-developer.github.io/EnderElevator/assets/og-image.svg">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" type="image/png" href="/EnderElevator/assets/icons/Ender_Elevator_Block_Purple.png">
+  <link rel="stylesheet" href="/EnderElevator/assets/site.css">
+  <script defer src="/EnderElevator/assets/site.js"></script>
+</head>
+<body class="home-page">
+  <div class="site-shell">
+    <header class="top-nav">
+    <a class="brand" href="/EnderElevator/" aria-label="EnderElevator home">
+      <img src="/EnderElevator/assets/icons/Ender_Elevator_Block_Purple.png" alt="" aria-hidden="true">
+      <span>EnderElevator</span>
+    </a>
+    <nav class="desktop-nav" aria-label="Primary">
+      <a href="/EnderElevator/wiki/">Wiki</a>
+      <a href="/EnderElevator/roadmap/">Roadmap</a>
+      <a href="/EnderElevator/wiki/changelog/">Changelog</a>
+      <a href="/EnderElevator/credits/">Credits</a>
+    </nav>
+    <div class="nav-actions">
+      <nav class="language-switcher" aria-label="Language">
+    <a class="active" href="/EnderElevator/" hreflang="en">EN</a><a class="" href="/EnderElevator/pt-br/" hreflang="pt-br">PT-BR</a><a class="" href="/EnderElevator/es/" hreflang="es">ES</a>
+  </nav>
+      <a class="nav-cta" href="https://www.curseforge.com/hytale/mods/enderelevator">CurseForge</a>
+      <button class="menu-button" type="button" data-menu-toggle aria-expanded="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg><span>Menu</span></button>
+    </div>
+    <div class="mobile-menu" data-mobile-menu>
+      <a href="/EnderElevator/wiki/">Wiki</a>
+      <a href="/EnderElevator/roadmap/">Roadmap</a>
+      <a href="/EnderElevator/wiki/changelog/">Changelog</a>
+      <a href="/EnderElevator/credits/">Credits</a>
+      <a href="https://www.curseforge.com/hytale/mods/enderelevator">CurseForge</a>
+      <nav class="language-switcher" aria-label="Language">
+    <a class="active" href="/EnderElevator/" hreflang="en">EN</a><a class="" href="/EnderElevator/pt-br/" hreflang="pt-br">PT-BR</a><a class="" href="/EnderElevator/es/" hreflang="es">ES</a>
+  </nav>
+    </div>
+  </header>
+    <main>
+    <section class="hero-section">
+      <div class="hero-copy">
+        <div class="compat-rune">Version 1.1.4 - Hytale 0.5 / Early Access</div>
+        <h1>EnderElevator</h1>
+        <p class="hero-headline">Vertical travel, powered by ender magic.</p>
+        <p class="hero-sub">Jump to go up, crouch to go down. EnderElevator adds simple, safe, configurable vertical transport to Hytale servers and worlds.</p>
+        <div class="hero-actions">
+          <a class="button button-primary" href="https://www.curseforge.com/hytale/mods/enderelevator"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v11m0 0 4-4m-4 4-4-4M5 17v3h14v-3"/></svg><span>Download</span></a>
+          <a class="button button-secondary" href="/EnderElevator/wiki/"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4.5c2.8-.8 5-.2 7 1.3 2-1.5 4.2-2.1 7-1.3v14.2c-2.8-.8-5-.2-7 1.3-2-1.5-4.2-2.1-7-1.3V4.5Z"/><path d="M12 5.8V20"/></svg><span>Open Wiki</span></a>
+          <a class="button button-ghost" href="https://github.com/Ender-Developer/EnderElevator"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 19c-4.5 1.5-4.5-2-6-2.5m12 5v-3.9c0-1 .1-1.4-.5-2 2.8-.3 5.5-1.4 5.5-6.1 0-1.3-.5-2.4-1.2-3.3.1-.3.5-1.6-.1-3.2 0 0-1-.3-3.4 1.2a11.6 11.6 0 0 0-6.2 0C6.8 2.7 5.8 3 5.8 3c-.6 1.6-.2 2.9-.1 3.2A4.9 4.9 0 0 0 4.5 9.5c0 4.7 2.7 5.8 5.5 6.1-.4.4-.6.9-.6 1.8V21"/></svg><span>GitHub</span></a>
+        </div>
+      </div>
+      <div class="hero-art" aria-label="EnderElevator block variants">
+        <div class="hero-orbit">
+          <img class="hero-main-icon" src="/EnderElevator/assets/icons/Ender_Elevator_Block_Purple.png" alt="Purple Ender Elevator block icon">
+          <img style="--i:0" src="/EnderElevator/assets/icons/Ender_Elevator_Block_Yellow.png" alt="Yellow Ender Elevator block icon"><img style="--i:1" src="/EnderElevator/assets/icons/Ender_Elevator_Block_Purple.png" alt="Purple Ender Elevator block icon"><img style="--i:2" src="/EnderElevator/assets/icons/Ender_Elevator_Block_Red.png" alt="Red Ender Elevator block icon"><img style="--i:3" src="/EnderElevator/assets/icons/Ender_Elevator_Block_Orange.png" alt="Orange Ender Elevator block icon"><img style="--i:4" src="/EnderElevator/assets/icons/Ender_Elevator_Block_Cyan.png" alt="Cyan Ender Elevator block icon"><img style="--i:5" src="/EnderElevator/assets/icons/Ender_Elevator_Block_Violet.png" alt="Violet Ender Elevator block icon"><img style="--i:6" src="/EnderElevator/assets/icons/Ender_Elevator_Block_Brown.png" alt="Brown Ender Elevator block icon"><img style="--i:7" src="/EnderElevator/assets/icons/Ender_Elevator_Block_Pink.png" alt="Pink Ender Elevator block icon"><img style="--i:8" src="/EnderElevator/assets/icons/Ender_Elevator_Block_Green.png" alt="Green Ender Elevator block icon"><img style="--i:9" src="/EnderElevator/assets/icons/Ender_Elevator_Block_Black.png" alt="Black Ender Elevator block icon">
+        </div>
+        <div class="hero-art-caption">
+          <strong>11</strong>
+          <span>color variations</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="section-band next-peek">
+      <div class="section-heading">
+        <span>How it works</span>
+        <h2>Stand on the block. Let movement do the rest.</h2>
+      </div>
+      <div class="how-grid">
+        <article class="crystal-card"><span>01</span><h3>Jump to go up</h3><p>The system searches upward for the next matching elevator block in the same X/Z column.</p></article>
+        <article class="crystal-card"><span>02</span><h3>Crouch to go down</h3><p>Hold crouch to search downward for the next matching elevator below your feet.</p></article>
+        <article class="crystal-card wide"><span>03</span><h3>Teleport safely</h3><p>The destination must have two empty blocks above it, so players do not arrive inside a ceiling.</p></article>
+      </div>
+    </section>
+
+    <section class="content-section asymmetric">
+      <div class="section-heading">
+        <span>Built for players and server owners</span>
+        <h2>Practical transport without command spam.</h2>
+      </div>
+      <div class="feature-ledger">
+        <article><h3>11 color variations</h3><p>Build elevators that match stone halls, gardens, libraries, and arcane rooms.</p></article><article><h3>Configurable search distance</h3><p>Tune MaxSearchDistance for compact builds or very tall shafts.</p></article><article><h3>Cooldown configuration</h3><p>Use CooldownMs to keep repeated travel deliberate.</p></article><article><h3>Optional sound</h3><p>Enable teleport sound only when the server wants audible feedback.</p></article><article><h3>Optional smooth movement</h3><p>Enable smooth movement for a short interpolated travel effect.</p></article>
+      </div>
+    </section>
+
+    <section class="content-section variants-section">
+      <div class="section-heading compact">
+        <span>Block sprites</span>
+        <h2>The block is the brand.</h2>
+      </div>
+      <div class="variant-strip" aria-label="Recipes">
+    <figure>
+      <img src="/EnderElevator/assets/icons/Ender_Elevator_Block.png" alt="Base Ender Elevator block icon" loading="lazy">
+      <figcaption>Base</figcaption>
+    </figure><figure>
+      <img src="/EnderElevator/assets/icons/Ender_Elevator_Block_Yellow.png" alt="Yellow Ender Elevator block icon" loading="lazy">
+      <figcaption>Yellow</figcaption>
+    </figure><figure>
+      <img src="/EnderElevator/assets/icons/Ender_Elevator_Block_Purple.png" alt="Purple Ender Elevator block icon" loading="lazy">
+      <figcaption>Purple</figcaption>
+    </figure><figure>
+      <img src="/EnderElevator/assets/icons/Ender_Elevator_Block_Red.png" alt="Red Ender Elevator block icon" loading="lazy">
+      <figcaption>Red</figcaption>
+    </figure><figure>
+      <img src="/EnderElevator/assets/icons/Ender_Elevator_Block_Orange.png" alt="Orange Ender Elevator block icon" loading="lazy">
+      <figcaption>Orange</figcaption>
+    </figure><figure>
+      <img src="/EnderElevator/assets/icons/Ender_Elevator_Block_Cyan.png" alt="Cyan Ender Elevator block icon" loading="lazy">
+      <figcaption>Cyan</figcaption>
+    </figure><figure>
+      <img src="/EnderElevator/assets/icons/Ender_Elevator_Block_Violet.png" alt="Violet Ender Elevator block icon" loading="lazy">
+      <figcaption>Violet</figcaption>
+    </figure><figure>
+      <img src="/EnderElevator/assets/icons/Ender_Elevator_Block_Brown.png" alt="Brown Ender Elevator block icon" loading="lazy">
+      <figcaption>Brown</figcaption>
+    </figure><figure>
+      <img src="/EnderElevator/assets/icons/Ender_Elevator_Block_Pink.png" alt="Pink Ender Elevator block icon" loading="lazy">
+      <figcaption>Pink</figcaption>
+    </figure><figure>
+      <img src="/EnderElevator/assets/icons/Ender_Elevator_Block_Green.png" alt="Green Ender Elevator block icon" loading="lazy">
+      <figcaption>Green</figcaption>
+    </figure><figure>
+      <img src="/EnderElevator/assets/icons/Ender_Elevator_Block_Black.png" alt="Black Ender Elevator block icon" loading="lazy">
+      <figcaption>Black</figcaption>
+    </figure><figure>
+      <img src="/EnderElevator/assets/icons/Ender_Elevator_Block_Blue.png" alt="Blue Ender Elevator block icon" loading="lazy">
+      <figcaption>Blue</figcaption>
+    </figure>
+  </div>
+    </section>
+
+    <section class="content-section install-section">
+      <div class="stone-panel strong-panel">
+        <div class="section-heading compact">
+          <span>Install in 3 steps</span>
+          <h2>Download, place, enable.</h2>
+        </div>
+        <ol class="step-list">
+          <li><strong>CurseForge</strong><p>Install through the CurseForge app or download the latest jar.</p></li>
+          <li><strong>Mods folder</strong><p>Place the mod in the Hytale server or client mods folder used by your setup.</p></li>
+          <li><strong>World settings</strong><p>Enable the mod for the world or server and keep versions aligned.</p></li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="content-section two-column">
+      <div>
+        <div class="section-heading compact">
+          <span>Recipes preview</span>
+          <h2>White Wool, Life Essence, then color petals.</h2>
+        </div>
+        <div class="parchment-card">
+          <h3>Base Ender Elevator</h3>
+          <p>8x White Wool + 1x Life Essence</p>
+          <p>Crafted at Furniture Bench - Textiles category</p>
+          <a class="button button-accent" href="/EnderElevator/wiki/recipes/"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4.5c2.8-.8 5-.2 7 1.3 2-1.5 4.2-2.1 7-1.3v14.2c-2.8-.8-5-.2-7 1.3-2-1.5-4.2-2.1-7-1.3V4.5Z"/><path d="M12 5.8V20"/></svg><span>Recipes</span></a>
+        </div>
+      </div>
+      <div>
+        <div class="section-heading compact">
+          <span>Open the codex</span>
+          <h2>Player docs and contributor notes live together.</h2>
+        </div>
+        <div class="quick-link-grid">
+          <a class="quick-card" href="/EnderElevator/wiki/installation/"><span>Getting Started</span><strong>Installation</strong><p>Download EnderElevator, install it in Hytale, and keep worlds or servers on the supported build.</p></a><a class="quick-card" href="/EnderElevator/wiki/usage/"><span>Player Docs</span><strong>Usage</strong><p>Place matching elevator blocks vertically, jump to go up, and crouch to go down.</p></a><a class="quick-card" href="/EnderElevator/wiki/configuration/"><span>Server Docs</span><strong>Configuration</strong><p>Document every config key: search distance, CooldownMs, teleport sound, smooth movement, and SmoothingDurationMs.</p></a><a class="quick-card" href="/EnderElevator/wiki/troubleshooting/"><span>Support</span><strong>Troubleshooting</strong><p>Symptom, likely cause, fix, and related page for common EnderElevator issues.</p></a><a class="quick-card" href="/EnderElevator/wiki/development/"><span>Developer Docs</span><strong>Development</strong><p>A concise contributor map of the ECS systems, components, and configuration.</p></a><a class="quick-card" href="/EnderElevator/wiki/changelog/"><span>Project</span><strong>Changelog</strong><p>Version history mirrored from CHANGELOG.md.</p></a>
+        </div>
+      </div>
+    </section>
+
+    <section class="content-section support-section">
+      <div class="section-heading compact">
+        <span>Support and source</span>
+        <h2>Report issues where the mod is built.</h2>
+      </div>
+      <div class="support-actions">
+        <a class="button button-secondary" href="https://github.com/Ender-Developer/EnderElevator/issues"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 19c-4.5 1.5-4.5-2-6-2.5m12 5v-3.9c0-1 .1-1.4-.5-2 2.8-.3 5.5-1.4 5.5-6.1 0-1.3-.5-2.4-1.2-3.3.1-.3.5-1.6-.1-3.2 0 0-1-.3-3.4 1.2a11.6 11.6 0 0 0-6.2 0C6.8 2.7 5.8 3 5.8 3c-.6 1.6-.2 2.9-.1 3.2A4.9 4.9 0 0 0 4.5 9.5c0 4.7 2.7 5.8 5.5 6.1-.4.4-.6.9-.6 1.8V21"/></svg><span>GitHub issues</span></a>
+        <a class="button button-secondary" href="https://discord.gg/xA6eVzwzbH"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m12 2 2.4 6.3L21 11l-6.6 2.7L12 20l-2.4-6.3L3 11l6.6-2.7L12 2Z"/></svg><span>Discord</span></a>
+        <a class="button button-primary" href="https://www.curseforge.com/hytale/mods/enderelevator"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v11m0 0 4-4m-4 4-4-4M5 17v3h14v-3"/></svg><span>CurseForge</span></a>
+      </div>
+    </section>
+  </main>
+    <footer class="site-footer">
+    <div>
+      <strong>EnderElevator Codex</strong>
+      <p>Vertical travel, powered by ender magic. Download EnderElevator and read the official wiki for installation, recipes, configuration, and development notes.</p>
+    </div>
+    <nav>
+      <a href="https://www.curseforge.com/hytale/mods/enderelevator">CurseForge</a>
+      <a href="https://github.com/Ender-Developer/EnderElevator">GitHub</a>
+      <a href="https://discord.gg/xA6eVzwzbH">Discord</a>
+    </nav>
+  </footer>
+  </div>
+</body>
+</html>

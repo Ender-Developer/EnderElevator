@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Configuration - EnderElevator Codex</title>
+  <meta name="description" content="Document every config key: search distance, CooldownMs, teleport sound, smooth movement, and SmoothingDurationMs.">
+  <link rel="canonical" href="https://ender-developer.github.io/EnderElevator/wiki/configuration/">
+  <link rel="alternate" hreflang="en" href="https://ender-developer.github.io/EnderElevator/wiki/configuration/">
+  <link rel="alternate" hreflang="pt-br" href="https://ender-developer.github.io/EnderElevator/pt-br/wiki/configuracao/">
+  <link rel="alternate" hreflang="es" href="https://ender-developer.github.io/EnderElevator/es/wiki/configuracion/">
+  <link rel="alternate" hreflang="x-default" href="https://ender-developer.github.io/EnderElevator/wiki/configuration/">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Configuration - EnderElevator Codex">
+  <meta property="og:description" content="Document every config key: search distance, CooldownMs, teleport sound, smooth movement, and SmoothingDurationMs.">
+  <meta property="og:url" content="https://ender-developer.github.io/EnderElevator/wiki/configuration/">
+  <meta property="og:site_name" content="EnderElevator Codex">
+  <meta property="og:locale" content="en_US">
+  <meta property="og:image" content="https://ender-developer.github.io/EnderElevator/assets/og-image.svg">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" type="image/png" href="/EnderElevator/assets/icons/Ender_Elevator_Block_Purple.png">
+  <link rel="stylesheet" href="/EnderElevator/assets/site.css">
+  <script defer src="/EnderElevator/assets/site.js"></script>
+</head>
+<body class="docs-page">
+  <div class="site-shell">
+    <header class="top-nav">
+    <a class="brand" href="/EnderElevator/" aria-label="EnderElevator home">
+      <img src="/EnderElevator/assets/icons/Ender_Elevator_Block_Purple.png" alt="" aria-hidden="true">
+      <span>EnderElevator</span>
+    </a>
+    <nav class="desktop-nav" aria-label="Primary">
+      <a href="/EnderElevator/wiki/">Wiki</a>
+      <a href="/EnderElevator/roadmap/">Roadmap</a>
+      <a href="/EnderElevator/wiki/changelog/">Changelog</a>
+      <a href="/EnderElevator/credits/">Credits</a>
+    </nav>
+    <div class="nav-actions">
+      <nav class="language-switcher" aria-label="Language">
+    <a class="active" href="/EnderElevator/wiki/configuration/" hreflang="en">EN</a><a class="" href="/EnderElevator/pt-br/wiki/configuracao/" hreflang="pt-br">PT-BR</a><a class="" href="/EnderElevator/es/wiki/configuracion/" hreflang="es">ES</a>
+  </nav>
+      <a class="nav-cta" href="https://www.curseforge.com/hytale/mods/enderelevator">CurseForge</a>
+      <button class="menu-button" type="button" data-menu-toggle aria-expanded="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg><span>Menu</span></button>
+    </div>
+    <div class="mobile-menu" data-mobile-menu>
+      <a href="/EnderElevator/wiki/">Wiki</a>
+      <a href="/EnderElevator/roadmap/">Roadmap</a>
+      <a href="/EnderElevator/wiki/changelog/">Changelog</a>
+      <a href="/EnderElevator/credits/">Credits</a>
+      <a href="https://www.curseforge.com/hytale/mods/enderelevator">CurseForge</a>
+      <nav class="language-switcher" aria-label="Language">
+    <a class="active" href="/EnderElevator/wiki/configuration/" hreflang="en">EN</a><a class="" href="/EnderElevator/pt-br/wiki/configuracao/" hreflang="pt-br">PT-BR</a><a class="" href="/EnderElevator/es/wiki/configuracion/" hreflang="es">ES</a>
+  </nav>
+    </div>
+  </header>
+    <div class="wiki-layout"><aside class="wiki-sidebar">
+    <div class="search-shell sidebar-search"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m21 21-4.3-4.3M10.8 18a7.2 7.2 0 1 1 0-14.4 7.2 7.2 0 0 1 0 14.4Z"/></svg><input type="search" data-search-input placeholder="Search the codex..."><div class="search-results" data-search-results></div></div>
+    <div class="sidebar-group"><strong>Getting Started</strong><a class="" href="/EnderElevator/wiki/">EnderElevator Wiki</a><a class="" href="/EnderElevator/wiki/installation/">Installation</a></div><div class="sidebar-group"><strong>Player Docs</strong><a class="" href="/EnderElevator/wiki/usage/">Usage</a><a class="" href="/EnderElevator/wiki/recipes/">Recipes</a></div><div class="sidebar-group"><strong>Server Docs</strong><a class="active" href="/EnderElevator/wiki/configuration/">Configuration</a><a class="" href="/EnderElevator/wiki/compatibility/">Compatibility</a><a class="" href="/EnderElevator/wiki/troubleshooting/">Troubleshooting</a></div><div class="sidebar-group"><strong>Developer Docs</strong><a class="" href="/EnderElevator/wiki/development/">Development</a><a class="" href="/EnderElevator/wiki/changelog/">Changelog</a></div><div class="sidebar-group"><strong>Project</strong><a class="" href="/EnderElevator/roadmap/">Roadmap</a><a class="" href="/EnderElevator/credits/">Credits</a></div>
+  </aside><main class="wiki-main" data-pagefind-body>
+        <details class="mobile-docs-nav">
+    <summary>Docs</summary>
+    <a class="" href="/EnderElevator/wiki/installation/">Installation</a><a class="" href="/EnderElevator/wiki/usage/">Usage</a><a class="" href="/EnderElevator/wiki/recipes/">Recipes</a><a class="active" href="/EnderElevator/wiki/configuration/">Configuration</a><a class="" href="/EnderElevator/wiki/compatibility/">Compatibility</a><a class="" href="/EnderElevator/wiki/troubleshooting/">Troubleshooting</a><a class="" href="/EnderElevator/wiki/development/">Development</a><a class="" href="/EnderElevator/wiki/changelog/">Changelog</a><a class="" href="/EnderElevator/roadmap/">Roadmap</a><a class="" href="/EnderElevator/credits/">Credits</a>
+  </details>
+        <article class="wiki-article">
+          <header class="page-header">
+            <span class="page-category">Server Docs</span>
+            <h1>Configuration</h1>
+            <p>Document every config key: search distance, CooldownMs, teleport sound, smooth movement, and SmoothingDurationMs.</p>
+            <div class="page-meta"><span>Updated 2026-06-04</span><span>EnderElevator 1.1.4</span></div>
+          </header>
+          
+    <aside class="alert alert-tip">
+    <div class="alert-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18h6m-5 3h4m-6.5-8.5A6.2 6.2 0 1 1 16.5 13c-.9.7-1.5 1.6-1.5 2.5H9c0-.9-.6-1.8-1.5-3Z"/></svg></div>
+    <div><strong>Config keys</strong><p>config.json is managed by Hytale&#39;s config system. These keys are exact and case-sensitive.</p></div>
+  </aside>
+    <h2 id="default-config">Default config</h2>
+    <div class="code-block" data-code-block>
+    <div class="code-head"><span>json</span><button class="copy-button" type="button" data-copy-code><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 8h11v13H8z"/><path d="M5 16H4V3h13v1"/></svg><span>Copy</span></button></div>
+    <pre><code>{
+  &quot;MaxSearchDistance&quot;: 320,
+  &quot;CooldownMs&quot;: 500,
+  &quot;EnableSound&quot;: false,
+  &quot;EnableSmoothMovement&quot;: false,
+  &quot;SmoothingDurationMs&quot;: 320
+}</code></pre>
+  </div>
+    <h2 id="config-reference">Config reference</h2>
+    <div class="table-scroll"><table class="config-table">
+    <thead><tr><th>Key</th><th>Type</th><th>Default</th><th>Description</th><th>Gameplay effect</th><th>Recommended</th></tr></thead>
+    <tbody><tr><td><code>MaxSearchDistance</code></td><td><code>integer</code></td><td><code>320</code></td><td>Maximum vertical search range, in blocks.</td><td>Higher values allow taller shafts but cost more search work when no destination exists.</td><td><code>160-320</code></td></tr><tr><td><code>CooldownMs</code></td><td><code>long</code></td><td><code>500</code></td><td>Delay between successful elevator uses.</td><td>Prevents accidental rapid re-use while jump or crouch is held.</td><td><code>400-700</code></td></tr><tr><td><code>EnableSound</code></td><td><code>boolean</code></td><td><code>false</code></td><td>Enables the teleport sound event.</td><td>Plays SFX_Portal_Neutral_Teleport_Local after a successful teleport.</td><td><code>false for quiet servers</code></td></tr><tr><td><code>EnableSmoothMovement</code></td><td><code>boolean</code></td><td><code>false</code></td><td>Uses short smooth movement instead of instant teleport.</td><td>Moves through the shaft with interpolation, then applies one final correction teleport.</td><td><code>true for visual polish</code></td></tr><tr><td><code>SmoothingDurationMs</code></td><td><code>integer</code></td><td><code>320</code></td><td>Duration of smooth travel in milliseconds.</td><td>Clamped between 180 and 650 ms so smooth movement stays responsive.</td><td><code>260-380</code></td></tr></tbody>
+  </table></div>
+    <h2 id="smooth-movement-example">Smooth movement example</h2>
+    <div class="code-block" data-code-block>
+    <div class="code-head"><span>json</span><button class="copy-button" type="button" data-copy-code><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 8h11v13H8z"/><path d="M5 16H4V3h13v1"/></svg><span>Copy</span></button></div>
+    <pre><code>{
+  &quot;MaxSearchDistance&quot;: 240,
+  &quot;CooldownMs&quot;: 550,
+  &quot;EnableSound&quot;: true,
+  &quot;EnableSmoothMovement&quot;: true,
+  &quot;SmoothingDurationMs&quot;: 320
+}</code></pre>
+  </div>
+  
+          <nav class="prev-next" aria-label="Pagination">
+    <a href="/EnderElevator/wiki/recipes/"><span>Previous</span><strong>Recipes</strong></a>
+    <a href="/EnderElevator/wiki/compatibility/"><span>Next</span><strong>Compatibility</strong></a>
+  </nav>
+        </article>
+      </main><aside class="on-this-page">
+    <div class="parchment-card toc-card">
+      <strong>On this page</strong>
+      <ol><li><a href="#default-config">Default config</a></li><li><a href="#config-reference">Config reference</a></li><li><a href="#smooth-movement-example">Smooth movement example</a></li></ol>
+    </div>
+  </aside></div>
+    <footer class="site-footer">
+    <div>
+      <strong>EnderElevator Codex</strong>
+      <p>Vertical travel, powered by ender magic. Download EnderElevator and read the official wiki for installation, recipes, configuration, and development notes.</p>
+    </div>
+    <nav>
+      <a href="https://www.curseforge.com/hytale/mods/enderelevator">CurseForge</a>
+      <a href="https://github.com/Ender-Developer/EnderElevator">GitHub</a>
+      <a href="https://discord.gg/xA6eVzwzbH">Discord</a>
+    </nav>
+  </footer>
+  </div>
+</body>
+</html>

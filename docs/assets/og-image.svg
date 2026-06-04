@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <defs>
+    <radialGradient id="g" cx="70%" cy="45%" r="50%">
+      <stop offset="0" stop-color="#7B4FD6" stop-opacity=".5"/>
+      <stop offset=".56" stop-color="#121A1D"/>
+      <stop offset="1" stop-color="#070B0D"/>
+    </radialGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#g)"/>
+  <rect x="46" y="42" width="1108" height="546" rx="28" fill="none" stroke="#7E6843" stroke-width="2"/>
+  <image href="/EnderElevator/assets/icons/Ender_Elevator_Block_Purple.png" x="790" y="175" width="220" height="220"/>
+  <text x="96" y="220" fill="#F4E8CB" font-family="Georgia, serif" font-size="88" font-weight="700">EnderElevator</text>
+  <text x="100" y="298" fill="#C8A86B" font-family="Georgia, serif" font-size="42">Vertical travel, powered by ender magic.</text>
+  <text x="102" y="372" fill="#D8C8A7" font-family="Arial, sans-serif" font-size="28">Official Hytale mod wiki and public site</text>
+  <text x="102" y="488" fill="#72E0CF" font-family="monospace" font-size="24">Version 1.1.4 - Hytale 0.5 / Early Access</text>
+</svg>
