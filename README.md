@@ -7,12 +7,30 @@
 
 ## 🚀 Features
 
-* **Seamless Vertical Travel:** Teleport instantly between floors.
+* **Seamless Vertical Travel:** Teleport instantly between floors, or enable short smooth vertical travel in config.
 * **Simple Controls:**
     * **Jump (Space):** Teleport to the next elevator block directly **above** you.
     * **Crouch (Ctrl):** Teleport to the next elevator block directly **below** you.
 * **Safety Mechanics:** The system checks if there is sufficient space (2 blocks high) at the destination before teleporting the player, preventing suffocation or getting stuck.
 * **Distance:** As long as the blocks are aligned on the same X and Z coordinates, the distance between floors does not matter.
+* **Look Preservation:** Teleports preserve the player's pitch and yaw, so looking up or down before activation does not reset the camera.
+* **Sound Feedback:** Optional teleport sound using Hytale's `SFX_Portal_Neutral_Teleport_Local` event.
+
+## ⚙️ Configuration
+
+`config.json` is managed through Hytale's config system:
+
+```json
+{
+  "MaxSearchDistance": 320,
+  "CooldownMs": 500,
+  "EnableSound": false,
+  "EnableSmoothMovement": false,
+  "SmoothingDurationMs": 320
+}
+```
+
+`SmoothingDurationMs` is clamped between `180` and `650` milliseconds to keep travel responsive.
 
 ## 🛠️ Crafting
 
@@ -42,6 +60,22 @@ To create a specific color, combine **1x Ender Elevator** with the corresponding
 
 1.  Download the latest release of `EnderElevator`.
 2.  Place the mod files into your Hytale server's `mods` folder
+
+## 🧰 Development
+
+To refresh browsable Hytale server sources from the installed game, run:
+
+```powershell
+./gradlew refreshHytaleSources
+```
+
+The task reads the installed patchline from Hytale's `patchline.json`, decompiles the local `HytaleServer.jar` with `tools/vineflower.jar`, and writes sources to:
+
+```text
+.generated/hytale-server-sources
+```
+
+The generated folder is ignored by Git. In IntelliJ, mark or open `.generated/hytale-server-sources` as a source root when you want full-text navigation through the decompiled Hytale server code.
 
 ## 🤝 Contributing
 

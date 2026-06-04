@@ -17,6 +17,8 @@ public class ElevatorComponent implements Component<EntityStore> {
     }
 
     private long lastUseTimestamp;
+    private long lastFailedUpTimestamp;
+    private long lastFailedDownTimestamp;
 
     public ElevatorComponent() {
     }
@@ -27,6 +29,8 @@ public class ElevatorComponent implements Component<EntityStore> {
 
     public ElevatorComponent(@Nonnull ElevatorComponent other) {
         this.lastUseTimestamp = other.lastUseTimestamp;
+        this.lastFailedUpTimestamp = other.lastFailedUpTimestamp;
+        this.lastFailedDownTimestamp = other.lastFailedDownTimestamp;
     }
 
     public long getLastUseTimestamp() {
@@ -35,6 +39,18 @@ public class ElevatorComponent implements Component<EntityStore> {
 
     public void setLastUseTimestamp(long lastUseTimestamp) {
         this.lastUseTimestamp = lastUseTimestamp;
+    }
+
+    public long getLastFailedUseTimestamp(boolean up) {
+        return up ? lastFailedUpTimestamp : lastFailedDownTimestamp;
+    }
+
+    public void setLastFailedUseTimestamp(boolean up, long timestamp) {
+        if (up) {
+            this.lastFailedUpTimestamp = timestamp;
+        } else {
+            this.lastFailedDownTimestamp = timestamp;
+        }
     }
 
     @Nonnull

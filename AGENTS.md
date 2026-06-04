@@ -19,18 +19,27 @@ The heart of the mod. It runs as an `EntityTickingSystem` and:
 - Checks if the player is standing on an `ender_elevator_block`.
 - Monitors `MovementStates` (jumping/crouching).
 - Performs safe vertical searches for target blocks.
-- Triggers `Teleport` components using the `commandBuffer`.
-- Plays immersive effects (Sound and Camera Shake) if enabled in config.
+- Triggers instant `Teleport` components or starts a smooth travel component.
+- Plays the teleport sound if enabled in config.
 
 ### 2. `ElevatorComponent`
 A native ECS component used to store the `lastUseTimestamp` for each player. This handles cooldowns without using static maps, ensuring better performance and persistence compatibility.
+It also stores short failed-search timestamps per direction so holding jump/crouch on an elevator without a valid destination does not scan the full vertical range every tick.
 
-### 3. `ElevatorConfig`
+### 3. `SmoothingComponent` and `SmoothingSystem`
+Native ECS state and ticking logic for optional smooth vertical travel.
+- `SmoothingComponent` stores start/end positions, elapsed time, and duration.
+- `SmoothingSystem` moves the player through `TransformComponent#setPosition()` each tick and uses a single final `Teleport` correction.
+- Capture a copy of `TransformComponent#getRotation()` when travel starts and pass it to `Teleport.createForPlayer(...)`; this preserves the player's pitch/yaw instead of resetting the camera.
+- Never implement smoothing by adding a `Teleport` component every tick; that creates visible jitter and rotation resets.
+
+### 4. `ElevatorConfig`
 Managed via Hytale's `BuilderCodec`. Configuration is stored in `config.json` and includes:
 - `maxSearchDistance`: Maximum vertical range.
 - `cooldownMs`: Time between teleports.
 - `enableSound`: Toggle for teleport sound (Default: false).
-- `enableShake`: Toggle for camera shake (Default: false).
+- `enableSmoothMovement`: Toggle for smooth vertical travel (Default: false).
+- `smoothingDurationMs`: Smooth travel duration, clamped between 180ms and 650ms (Default: 320).
 
 ## ⚠️ Important Implementation Notes
 
@@ -47,9 +56,9 @@ if (world.getChunkIfLoaded(chunkIndex) == null) return;
 Accessing blocks in non-ticking chunks during a tick cycle will crash the server.
 
 ### 3. Asset Indexing
-Hytale 2.0 registries load after plugin initialization. Always use **Lazy Loading** for sound and camera indices:
+Hytale 2.0 registries load after plugin initialization. Always use **Lazy Loading** for sound indices:
 - Sound: `SoundEvent.getAssetMap().getIndex("SFX/...")`
-- Camera: `CameraShake.getAssetMap().getIndex("Impact/...")`
+- Resolve the sound only when a teleport succeeds and sound is enabled; do not retry asset lookup on every idle player tick.
 
 ## 🚀 Development Workflow
 
@@ -61,7 +70,6 @@ Hytale 2.0 registries load after plugin initialization. Always use **Lazy Loadin
 ## 🗺 Roadmap 2.0
 - [x] ECS Modernization.
 - [x] Sound Effects (`SFX_Portal_Neutral_Teleport_Local`).
-- [x] Camera Shake (`Impact_Light`).
-- [x] Configuration toggles for effects.
+- [x] Configuration toggles for sound and smooth travel.
+- [x] Smooth Interpolated Movement.
 - [ ] Directional Elevators (Horizontal teleportation).
-- [ ] Smooth Interpolated Movement.

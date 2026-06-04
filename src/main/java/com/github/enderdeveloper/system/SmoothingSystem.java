@@ -1,13 +1,14 @@
 package com.github.enderdeveloper.system;
 
 import com.github.enderdeveloper.component.SmoothingComponent;
+import com.github.enderdeveloper.util.PlayerTeleportFactory;
+import com.github.enderdeveloper.util.SmoothingMath;
 import com.hypixel.hytale.component.ArchetypeChunk;
 import com.hypixel.hytale.component.CommandBuffer;
+import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.component.query.Query;
 import com.hypixel.hytale.component.system.tick.EntityTickingSystem;
-import com.hypixel.hytale.math.util.MathUtil;
-import com.hypixel.hytale.math.vector.Transform;
 import com.hypixel.hytale.server.core.entity.entities.Player;
 import com.hypixel.hytale.server.core.modules.entity.component.TransformComponent;
 import com.hypixel.hytale.server.core.modules.entity.teleport.Teleport;
@@ -20,6 +21,7 @@ import org.joml.Vector3d;
 public class SmoothingSystem extends EntityTickingSystem<EntityStore> {
 
     private final Query<EntityStore> query;
+    private final ThreadLocal<Vector3d> currentPosition = ThreadLocal.withInitial(Vector3d::new);
 
     public SmoothingSystem() {
         this.query = Query.and(
@@ -34,31 +36,23 @@ public class SmoothingSystem extends EntityTickingSystem<EntityStore> {
         SmoothingComponent smoothing = archetypeChunk.getComponent(index, SmoothingComponent.getComponentType());
         if (smoothing == null) return;
 
-        World world = store.getExternalData().getWorld();
-        
-        float progress = smoothing.getProgress() + (dt * smoothing.getSpeed());
-        
-        if (progress >= 1.0f) {
-            // Arrived at destination
-            world.execute(() -> {
-                Teleport teleport = Teleport.createForPlayer(world, new Transform(smoothing.getEndPosition(), new com.hypixel.hytale.math.vector.Rotation3f()));
-                store.addComponent(archetypeChunk.getReferenceTo(index), Teleport.getComponentType(), teleport);
-                store.removeComponent(archetypeChunk.getReferenceTo(index), SmoothingComponent.getComponentType());
-            });
-        } else {
-            smoothing.setProgress(progress);
-            
-            // Calculate interpolated position
-            Vector3d currentPos = new Vector3d();
-            currentPos.x = MathUtil.lerp(smoothing.getStartPosition().x, smoothing.getEndPosition().x, progress);
-            currentPos.y = MathUtil.lerp(smoothing.getStartPosition().y, smoothing.getEndPosition().y, progress);
-            currentPos.z = MathUtil.lerp(smoothing.getStartPosition().z, smoothing.getEndPosition().z, progress);
+        TransformComponent transformComp = archetypeChunk.getComponent(index, TransformComponent.getComponentType());
+        if (transformComp == null) return;
 
-            world.execute(() -> {
-                // Use teleport for smooth but forced server-authoritative movement 
-                Teleport teleport = Teleport.createForPlayer(world, new Transform(currentPos, new com.hypixel.hytale.math.vector.Rotation3f()));
-                store.addComponent(archetypeChunk.getReferenceTo(index), Teleport.getComponentType(), teleport);
-            });
+        World world = store.getExternalData().getWorld();
+        Ref<EntityStore> entityRef = archetypeChunk.getReferenceTo(index);
+
+        smoothing.setElapsedSeconds(smoothing.getElapsedSeconds() + dt);
+        float progress = SmoothingMath.normalizedProgress(smoothing.getElapsedSeconds(), smoothing.getDurationSeconds());
+        float easedProgress = SmoothingMath.easeInOutCubic(progress);
+        Vector3d interpolatedPosition = currentPosition.get();
+        SmoothingMath.interpolate(smoothing.getStartPosition(), smoothing.getEndPosition(), easedProgress, interpolatedPosition);
+        transformComp.setPosition(interpolatedPosition);
+
+        if (progress >= 1.0f) {
+            Teleport teleport = PlayerTeleportFactory.create(world, smoothing.getEndPosition(), smoothing.getRotation());
+            commandBuffer.addComponent(entityRef, Teleport.getComponentType(), teleport);
+            commandBuffer.removeComponent(entityRef, SmoothingComponent.getComponentType());
         }
     }
 

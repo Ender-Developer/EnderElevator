@@ -1,0 +1,240 @@
+ext {
+    hytaleHome = findProperty('hytale_home')?.toString() ?: "D:\\Program Files\\Hypixel Studios\\Hytale"
+}
+
+def resolveHytalePatchline = {
+    def configuredPatchline = findProperty('patchline')?.toString()?.trim()
+    def patchlineFile = file("$hytaleHome/patchline.json")
+
+    if (patchlineFile.isFile()) {
+        try {
+            def parsedPatchline = new groovy.json.JsonSlurper().parse(patchlineFile).patchline
+            def detectedPatchline = parsedPatchline?.toString()?.trim()
+            if (detectedPatchline) {
+                return detectedPatchline
+            }
+        } catch (Exception ex) {
+            throw new GradleException("Could not parse Hytale patchline file at ${patchlineFile}", ex)
+        }
+    }
+
+    if (!configuredPatchline) {
+        throw new GradleException("No Hytale patchline found. Add patchline=release to gradle.properties or install Hytale with the official launcher.")
+    }
+
+    return configuredPatchline
+}
+
+def resolvedPatchline = resolveHytalePatchline()
+def hytaleGameDir = file("$hytaleHome/install/$resolvedPatchline/package/game/latest")
+def hytaleServerJar = file("$hytaleGameDir/Server/HytaleServer.jar")
+def hytaleAssetsZip = file("$hytaleGameDir/Assets.zip")
+def hytaleDecompilerJar = layout.projectDirectory.file("tools/vineflower.jar")
+def hytaleExtractDir = layout.buildDirectory.dir("hytale-decompile/classes")
+def hytaleSourcesDir = layout.projectDirectory.dir(".generated/hytale-server-sources")
+def serverRunDir = file("$projectDir/run")
+
+def requireExistingFile = { File candidate, String label ->
+    if (!candidate.isFile()) {
+        throw new GradleException("$label not found at ${candidate.absolutePath}")
+    }
+}
+
+dependencies {
+    implementation(files(hytaleServerJar))
+}
+
+serverRunDir.mkdirs()
+
+tasks.register('updatePluginManifest') {
+    def manifestFile = file('src/main/resources/manifest.json')
+
+    doLast {
+        if (!manifestFile.exists()) {
+            throw new GradleException("Could not find manifest.json at ${manifestFile.path}!")
+        }
+
+        def manifestJson = new groovy.json.JsonSlurper().parseText(manifestFile.text)
+        manifestJson.Version = version
+        manifestJson.IncludesAssetPack = includes_pack.toBoolean()
+        manifestFile.text = groovy.json.JsonOutput.prettyPrint(groovy.json.JsonOutput.toJson(manifestJson))
+    }
+}
+
+tasks.named('processResources') {
+    dependsOn 'updatePluginManifest'
+}
+
+tasks.register('printHytaleInstall') {
+    group = 'hytale'
+    description = 'Prints the detected Hytale installation paths used by the build.'
+
+    doLast {
+        println "Hytale home: $hytaleHome"
+        println "Patchline: $resolvedPatchline"
+        println "Server jar: ${hytaleServerJar.absolutePath}"
+        println "Assets zip: ${hytaleAssetsZip.absolutePath}"
+        println "Vineflower jar: ${hytaleDecompilerJar.asFile.absolutePath}"
+        requireExistingFile(hytaleServerJar, 'Hytale server jar')
+        requireExistingFile(hytaleDecompilerJar.asFile, 'Vineflower jar')
+    }
+}
+
+tasks.register('cleanHytaleDecompile', Delete) {
+    group = 'hytale'
+    description = 'Deletes generated Hytale server decompilation output and temporary extracted classes.'
+
+    delete hytaleSourcesDir
+    delete hytaleExtractDir
+}
+
+tasks.register('extractHytaleServerClasses', Copy) {
+    group = 'hytale'
+    description = 'Extracts Hytale server classes for decompilation.'
+
+    from(zipTree(hytaleServerJar)) {
+        include '**/*.class'
+        exclude 'darwin/**', 'linux/**', 'freebsd/**', 'win/**'
+    }
+    into hytaleExtractDir
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+
+    doFirst {
+        requireExistingFile(hytaleServerJar, 'Hytale server jar')
+    }
+}
+
+tasks.register('decompileHytaleServer', Exec) {
+    group = 'hytale'
+    description = 'Decompiles the installed Hytale server jar into browsable sources.'
+
+    dependsOn 'extractHytaleServerClasses'
+
+    def javaLauncher = javaToolchains.launcherFor {
+        languageVersion = JavaLanguageVersion.of(java_version)
+    }
+
+    doFirst {
+        def decompilerJar = hytaleDecompilerJar.asFile
+        def classesDir = hytaleExtractDir.get().asFile
+        def hypixelClassesDir = new File(classesDir, 'com/hypixel')
+        def sourcesDir = hytaleSourcesDir.asFile
+        def hypixelSourcesDir = new File(sourcesDir, 'com/hypixel')
+
+        requireExistingFile(decompilerJar, 'Vineflower jar')
+        if (!hypixelClassesDir.isDirectory()) {
+            throw new GradleException("Extracted Hytale classes not found at ${hypixelClassesDir.absolutePath}")
+        }
+
+        delete sourcesDir
+        hypixelSourcesDir.mkdirs()
+
+        executable = javaLauncher.get().executablePath.asFile.absolutePath
+        workingDir = classesDir
+        args = [
+            '-Xmx1536m',
+            '-jar',
+            decompilerJar.absolutePath,
+            '--decompile-generics=true',
+            '--hide-default-constructor=false',
+            '--remove-bridge=false',
+            '--ascii-strings=true',
+            '--use-lvt-names=true',
+            '--thread-count=1',
+            '--log-level=warn',
+            '-e=.',
+            hypixelClassesDir.absolutePath,
+            hypixelSourcesDir.absolutePath
+        ]
+    }
+}
+
+tasks.named('extractHytaleServerClasses') {
+    mustRunAfter 'cleanHytaleDecompile'
+}
+
+tasks.named('decompileHytaleServer') {
+    mustRunAfter 'cleanHytaleDecompile'
+}
+
+tasks.register('refreshHytaleSources') {
+    group = 'hytale'
+    description = 'Refreshes browsable Hytale server sources from the installed server jar.'
+
+    dependsOn 'cleanHytaleDecompile', 'decompileHytaleServer'
+}
+
+def hytaleServerMainClass = 'com.hypixel.hytale.Main'
+def ideaApplicationRunConfiguration = project.buildscript.classLoader.loadClass('org.jetbrains.gradle.ext.Application')
+def hytaleServerProgramArgs = {
+    def args = [
+        '--allow-op',
+        "--assets=${hytaleAssetsZip.absolutePath}"
+    ]
+
+    if (includes_pack.toBoolean()) {
+        // Point to src/main and Hytale will find the resources folder.
+        args += "--mods=${file('src/main').absolutePath}"
+    }
+    if (load_user_mods.toBoolean()) {
+        args += "--mods=$hytaleHome/UserData/Mods"
+    }
+
+    return args
+}
+
+tasks.register('stopHytaleServer') {
+    group = 'hytale'
+    description = 'Stops stale Hytale server Java processes started for this project.'
+
+    onlyIf {
+        org.gradle.internal.os.OperatingSystem.current().isWindows()
+    }
+
+    doLast {
+        def projectMarker = file('src/main').absolutePath
+        def mainMarker = hytaleServerMainClass
+        def command = """
+            Get-CimInstance Win32_Process |
+                Where-Object {
+                    \$_.Name -eq 'java.exe' -and
+                    \$_.CommandLine -match '${java.util.regex.Pattern.quote(mainMarker)}' -and
+                    \$_.CommandLine -match '${java.util.regex.Pattern.quote(projectMarker)}'
+                } |
+                ForEach-Object {
+                    Write-Host "Stopping stale Hytale server process \$(\$_.ProcessId)"
+                    Stop-Process -Id \$_.ProcessId -Force
+                }
+        """.stripIndent().trim()
+
+        def result = providers.exec {
+            commandLine 'powershell', '-NoProfile', '-ExecutionPolicy', 'Bypass', '-Command', command
+        }.result.get()
+
+        if (result.exitValue != 0) {
+            throw new GradleException("Could not stop stale Hytale server processes. PowerShell exited with code ${result.exitValue}.")
+        }
+    }
+}
+
+tasks.register('runHytaleServer', JavaExec) {
+    group = 'hytale'
+    description = 'Runs the Hytale server with this mod and clears stale server processes first.'
+
+    dependsOn 'classes'
+    dependsOn 'stopHytaleServer'
+
+    classpath = sourceSets.main.runtimeClasspath
+    mainClass = hytaleServerMainClass
+    workingDir = serverRunDir
+    args = hytaleServerProgramArgs()
+}
+
+idea.project.settings.runConfigurations {
+    'HytaleServer'(ideaApplicationRunConfiguration) {
+        mainClass = hytaleServerMainClass
+        moduleName = project.idea.module.name + '.main'
+        programParameters = hytaleServerProgramArgs().collect { "\"$it\"" }.join(' ')
+        workingDirectory = serverRunDir.absolutePath
+    }
+}
