@@ -3,6 +3,7 @@ package com.github.enderdeveloper.system;
 import com.github.enderdeveloper.component.ElevatorComponent;
 import com.github.enderdeveloper.component.SmoothingComponent;
 import com.github.enderdeveloper.config.ElevatorConfig;
+import com.github.enderdeveloper.util.PlayerLookRotation;
 import com.github.enderdeveloper.util.PlayerTeleportFactory;
 import com.hypixel.hytale.component.ArchetypeChunk;
 import com.hypixel.hytale.component.CommandBuffer;
@@ -20,6 +21,7 @@ import com.hypixel.hytale.server.core.asset.type.blocktype.config.BlockType;
 import com.hypixel.hytale.server.core.asset.type.soundevent.config.SoundEvent;
 import com.hypixel.hytale.server.core.entity.entities.Player;
 import com.hypixel.hytale.server.core.entity.movement.MovementStatesComponent;
+import com.hypixel.hytale.server.core.modules.entity.component.HeadRotation;
 import com.hypixel.hytale.server.core.modules.entity.component.TransformComponent;
 import com.hypixel.hytale.server.core.modules.entity.teleport.Teleport;
 import com.hypixel.hytale.server.core.universe.PlayerRef;
@@ -38,6 +40,7 @@ public class ElevatorSystem extends EntityTickingSystem<EntityStore> {
 
     private final ComponentType<EntityStore, MovementStatesComponent> movementType;
     private final ComponentType<EntityStore, TransformComponent> transformType;
+    private final ComponentType<EntityStore, HeadRotation> headRotationType;
     private final Query<EntityStore> query;
 
     // Asset indices (lazy loaded)
@@ -48,6 +51,7 @@ public class ElevatorSystem extends EntityTickingSystem<EntityStore> {
         this.config = config;
         this.movementType = MovementStatesComponent.getComponentType();
         this.transformType = TransformComponent.getComponentType();
+        this.headRotationType = HeadRotation.getComponentType();
         this.query = Query.and(
                 Player.getComponentType(),
                 movementType,
@@ -122,12 +126,14 @@ public class ElevatorSystem extends EntityTickingSystem<EntityStore> {
         }
 
         String elevatorVariant = currentBlock.getId();
+        HeadRotation headRotation = archetypeChunk.getComponent(index, headRotationType);
+        Rotation3f lookRotation = PlayerLookRotation.capture(transformComp, headRotation);
         boolean teleported = false;
 
         if (goingUp) {
             int maxY = Math.min(playerY + config.getMaxSearchDistance(), 318);
             for (int y = playerY + 2; y <= maxY; y++) {
-                if (tryTeleport(world, archetypeChunk, index, states, playerX, y, playerZ, elevatorVariant, commandBuffer, playerRef, transformComp, now)) {
+                if (tryTeleport(world, archetypeChunk, index, states, playerX, y, playerZ, elevatorVariant, commandBuffer, playerRef, transformComp, lookRotation, now)) {
                     states.jumping = false;
                     teleported = true;
                     break;
@@ -136,7 +142,7 @@ public class ElevatorSystem extends EntityTickingSystem<EntityStore> {
         } else {
             int minY = Math.max(playerY - config.getMaxSearchDistance(), 1);
             for (int y = playerY - 2; y >= minY; y--) {
-                if (tryTeleport(world, archetypeChunk, index, states, playerX, y, playerZ, elevatorVariant, commandBuffer, playerRef, transformComp, now)) {
+                if (tryTeleport(world, archetypeChunk, index, states, playerX, y, playerZ, elevatorVariant, commandBuffer, playerRef, transformComp, lookRotation, now)) {
                     states.crouching = false;
                     teleported = true;
                     break;
@@ -149,7 +155,7 @@ public class ElevatorSystem extends EntityTickingSystem<EntityStore> {
         }
     }
 
-    private boolean tryTeleport(World world, ArchetypeChunk<EntityStore> chunk, int index, MovementStates states, int x, int y, int z, String elevatorVariant, CommandBuffer<EntityStore> commandBuffer, PlayerRef playerRef, TransformComponent transformComp, long now) {
+    private boolean tryTeleport(World world, ArchetypeChunk<EntityStore> chunk, int index, MovementStates states, int x, int y, int z, String elevatorVariant, CommandBuffer<EntityStore> commandBuffer, PlayerRef playerRef, TransformComponent transformComp, Rotation3f lookRotation, long now) {
         if (!isChunkLoaded(world, x, z)) {
             return false;
         }
@@ -163,7 +169,7 @@ public class ElevatorSystem extends EntityTickingSystem<EntityStore> {
 
             Vector3d targetPos = new Vector3d(x + 0.5, y + 1.2, z + 0.5);
             Ref<EntityStore> entityRef = chunk.getReferenceTo(index);
-            Rotation3f teleportRotation = new Rotation3f(transformComp.getRotation());
+            Rotation3f teleportRotation = new Rotation3f(lookRotation);
 
             if (config.isEnableSmoothMovement()) {
                 commandBuffer.addComponent(

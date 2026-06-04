@@ -3,7 +3,7 @@
     "Name": "items.Ender_Elevator_Block_Black.name",
     "Description": "items.Ender_Elevator_Block.description"
   },
-  "Id": "My_New_Block",
+  "Id": "Ender_Elevator_Block_Black",
   "MaxStack": 100,
   "Icon": "Icons/ItemsGenerated/Ender_Elevator_Block_Black.png",
   "Categories": [
