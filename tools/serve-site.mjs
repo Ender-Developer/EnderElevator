@@ -62,5 +62,5 @@ const server = http.createServer((request, response) => {
 });
 
 server.listen(port, "127.0.0.1", () => {
-  console.log(`EnderElevator Codex preview: http://127.0.0.1:${port}${basePath}/`);
+  console.log(`EnderElevator preview: http://127.0.0.1:${port}${basePath}/`);
 });

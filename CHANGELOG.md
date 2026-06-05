@@ -5,6 +5,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 [1.1.4] - 2026-06-04
 
+Tested on **HytaleServer v2026.04.30-b4f6a911e** (pre-release, release)
+
 ### Compatibility Update
 
 * **Hytale Compatibility:** Updated EnderElevator to support newer Hytale versions `0.5+`.
@@ -12,8 +14,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * **Item Assets:** Updated the elevator item IDs to match the current asset naming expected by newer Hytale versions.
 
 [1.1.3] - 2026-01-19
-
-Tested on **HytaleServer v2026.01.17-a4cc0e7dd** (pre-release, release)
 
 🐛 Changes
 
@@ -34,8 +34,6 @@ Black: Ender Elevator + Petals Red + Petals Blue + Petals Yellow
 Blue: Ender Elevator + Petals Blue
 
 [1.1.2] - 2026-01-18
-
-Tested on **HytaleServer v2026.01.17-a4cc0e7dd** (pre-release, release)
 
 🐛 Fixes
 

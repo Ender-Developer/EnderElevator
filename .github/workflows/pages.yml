@@ -1,4 +1,4 @@
-name: Deploy EnderElevator Codex
+name: Deploy EnderElevator Site
 
 on:
   push:

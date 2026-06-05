@@ -1,6 +1,6 @@
 # EnderElevator - System Design Document
 
-**Version**: 1.1.3 (Pre-Release 2.0 Ready)  
+**Version**: 1.1.4 (Pre-Release 2026 Ready)
 **Author**: EnderDeveloper Team  
 **Architecture**: Hytale ECS (Entity Component System)  
 
