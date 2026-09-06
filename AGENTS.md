@@ -7,7 +7,7 @@ This file provides context and instructions for AI agents working on the EnderEl
 **EnderElevator** is a Hytale mod inspired by the "OpenBlocks Elevator". It allows players to teleport vertically between elevator blocks by jumping (up) or crouching (down).
 
 ### Technical Stack
-- **Game Version**: Hytale Pre-Release 2026 (v2026.04.30-b4f6a911e)
+- **Game Version**: Hytale Pre-Release. Manifest `ServerVersion` is SemverRange `*`.
 - **Java Version**: 25
 - **Math Library**: JOML (`org.joml.Vector3d`)
 - **System Architecture**: ECS (Entity Component System)
@@ -30,7 +30,8 @@ It also stores short failed-search timestamps per direction so holding jump/crou
 Native ECS state and ticking logic for optional smooth vertical travel.
 - `SmoothingComponent` stores start/end positions, elapsed time, and duration.
 - `SmoothingSystem` moves the player through `TransformComponent#setPosition()` each tick and uses a single final `Teleport` correction.
-- Capture a copy of `TransformComponent#getRotation()` when travel starts and pass it to `Teleport.createForPlayer(...)`; this preserves the player's pitch/yaw instead of resetting the camera.
+- Capture a copy of look rotation (prefer `HeadRotation`, fallback `TransformComponent#getRotation()`) when travel starts and pass it to `Teleport.createForPlayer(...)`; this preserves the player's pitch/yaw.
+- Do **not** call `setRotation` with the full look rotation after `createForPlayer` — that API already applies yaw-only body + full head rotation, and `Teleport.clone()` copies `headRotation`.
 - Never implement smoothing by adding a `Teleport` component every tick; that creates visible jitter and rotation resets.
 
 ### 4. `ElevatorConfig`
@@ -54,10 +55,12 @@ long chunkIndex = ChunkUtil.indexChunkFromBlock(x, z);
 if (world.getChunkIfLoaded(chunkIndex) == null) return;
 ```
 Accessing blocks in non-ticking chunks during a tick cycle will crash the server.
+Note: `getChunkIfLoaded` / `getBlockType` are `@Deprecated(forRemoval = true)` on current pre-release servers but remain the supported readiness check for this mod until a chunk-ref migration.
 
 ### 3. Asset Indexing
 Hytale 2.0 registries load after plugin initialization. Always use **Lazy Loading** for sound indices:
 - Sound: `SoundEvent.getAssetMap().getIndex("SFX/...")`
+- Missing key → `AssetMapWithIndexes.NOT_FOUND` (`Integer.MIN_VALUE`); never play `SoundEvent.EMPTY_ID` (`0`).
 - Resolve the sound only when a teleport succeeds and sound is enabled; do not retry asset lookup on every idle player tick.
 
 ## 🚀 Development Workflow
@@ -66,6 +69,7 @@ Hytale 2.0 registries load after plugin initialization. Always use **Lazy Loadin
 - **Run**: Use the `HytaleServer` run configuration in IntelliJ.
 - **Assets**: Located in `src/main/resources`. `IncludesAssetPack` must be `true` in `manifest.json`.
 - **Debugging**: Enable Hytale Diagnostic Mode in game settings for UI/Asset errors.
+- **patchline**: `pre-release` when targeting the current pre-release channel.
 
 ## 🗺 Roadmap 2.0
 - [x] ECS Modernization.

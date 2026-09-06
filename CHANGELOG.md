@@ -3,6 +3,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+[1.1.5] - 2026-09-06
+
+### Compatibility Update
+
+* **Teleport API:** Use `Teleport.createForPlayer(world, position, lookRotation)` as-is (yaw-only body + full head rotation). Removed the old workaround that rewrote body rotation after create — `Teleport.clone()` now copies `headRotation`.
+* **Sound indexing:** Treat `AssetMapWithIndexes.NOT_FOUND` and `SoundEvent.EMPTY_ID` as missing sound indices.
+* **Block emptiness:** Compare against `BlockType.EMPTY_KEY` (`"Empty"`) for obstruction checks.
+* **Annotations:** Align ticking systems with `javax.annotation.Nonnull` / `Nullable`.
+* **Manifest:** `ServerVersion` moved from legacy dated build strings to SemverRange `*`.
+* **Build channel:** `patchline=pre-release` for current pre-release targeting.
+
 [1.1.4] - 2026-06-04
 
 Tested on **HytaleServer v2026.04.30-b4f6a911e** (pre-release, release)

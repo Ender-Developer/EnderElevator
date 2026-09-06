@@ -10,15 +10,13 @@ public final class PlayerTeleportFactory {
     private PlayerTeleportFactory() {
     }
 
+    /**
+     * Builds a player teleport with {@code createForPlayer}:
+     * yaw-only body rotation + full look rotation on the head.
+     * {@link Teleport#clone()} copies {@code headRotation}, so callers must not
+     * overwrite body rotation with the full look rotation afterward.
+     */
     public static Teleport create(World world, Vector3d position, Rotation3f lookRotation) {
-        Rotation3f rotation = new Rotation3f(lookRotation);
-        Teleport teleport = Teleport.createForPlayer(world, position, rotation);
-
-        // Teleport.clone() currently does not copy headRotation. Keeping the full
-        // rotation on the body rotation as well prevents pitch loss if the component
-        // is cloned before Hytale's teleport system consumes it.
-        teleport.setRotation(rotation);
-        teleport.setHeadRotation(rotation);
-        return teleport;
+        return Teleport.createForPlayer(world, position, lookRotation);
     }
 }
