@@ -14,9 +14,10 @@ import com.hypixel.hytale.server.core.modules.entity.component.TransformComponen
 import com.hypixel.hytale.server.core.modules.entity.teleport.Teleport;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
-import org.checkerframework.checker.nullness.compatqual.NonNullDecl;
-import org.checkerframework.checker.nullness.compatqual.NullableDecl;
 import org.joml.Vector3d;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 public class SmoothingSystem extends EntityTickingSystem<EntityStore> {
 
@@ -32,7 +33,7 @@ public class SmoothingSystem extends EntityTickingSystem<EntityStore> {
     }
 
     @Override
-    public void tick(float dt, int index, @NonNullDecl ArchetypeChunk<EntityStore> archetypeChunk, @NonNullDecl Store<EntityStore> store, @NonNullDecl CommandBuffer<EntityStore> commandBuffer) {
+    public void tick(float dt, int index, @Nonnull ArchetypeChunk<EntityStore> archetypeChunk, @Nonnull Store<EntityStore> store, @Nonnull CommandBuffer<EntityStore> commandBuffer) {
         SmoothingComponent smoothing = archetypeChunk.getComponent(index, SmoothingComponent.getComponentType());
         if (smoothing == null) return;
 
@@ -56,7 +57,7 @@ public class SmoothingSystem extends EntityTickingSystem<EntityStore> {
         }
     }
 
-    @NullableDecl
+    @Nullable
     @Override
     public Query<EntityStore> getQuery() {
         return query;

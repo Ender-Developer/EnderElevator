@@ -5,6 +5,7 @@ import com.github.enderdeveloper.component.SmoothingComponent;
 import com.github.enderdeveloper.config.ElevatorConfig;
 import com.github.enderdeveloper.util.PlayerLookRotation;
 import com.github.enderdeveloper.util.PlayerTeleportFactory;
+import com.hypixel.hytale.assetstore.map.AssetMapWithIndexes;
 import com.hypixel.hytale.component.ArchetypeChunk;
 import com.hypixel.hytale.component.CommandBuffer;
 import com.hypixel.hytale.component.ComponentType;
@@ -28,9 +29,10 @@ import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.universe.world.SoundUtil;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
-import org.checkerframework.checker.nullness.compatqual.NonNullDecl;
-import org.checkerframework.checker.nullness.compatqual.NullableDecl;
 import org.joml.Vector3d;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 public class ElevatorSystem extends EntityTickingSystem<EntityStore> {
 
@@ -43,8 +45,8 @@ public class ElevatorSystem extends EntityTickingSystem<EntityStore> {
     private final ComponentType<EntityStore, HeadRotation> headRotationType;
     private final Query<EntityStore> query;
 
-    // Asset indices (lazy loaded)
-    private int teleportSoundIndex = Integer.MIN_VALUE;
+    // Asset indices (lazy loaded). NOT_FOUND until resolved; EMPTY_ID is never played.
+    private int teleportSoundIndex = AssetMapWithIndexes.NOT_FOUND;
     private boolean soundIndexInitialized = false;
 
     public ElevatorSystem(ElevatorConfig config) {
@@ -64,11 +66,11 @@ public class ElevatorSystem extends EntityTickingSystem<EntityStore> {
 
         // Try different path patterns common in Hytale 2.0
         int soundIdx = SoundEvent.getAssetMap().getIndex("SFX_Portal_Neutral_Teleport_Local");
-        if (soundIdx == Integer.MIN_VALUE) {
+        if (soundIdx == AssetMapWithIndexes.NOT_FOUND) {
             soundIdx = SoundEvent.getAssetMap().getIndex("SFX.Magic.Portals.SFX_Portal_Neutral_Teleport_Local");
         }
 
-        if (soundIdx == Integer.MIN_VALUE) {
+        if (soundIdx == AssetMapWithIndexes.NOT_FOUND || soundIdx == SoundEvent.EMPTY_ID) {
             return;
         }
 
@@ -78,7 +80,7 @@ public class ElevatorSystem extends EntityTickingSystem<EntityStore> {
     }
 
     @Override
-    public void tick(float dt, int index, @NonNullDecl ArchetypeChunk<EntityStore> archetypeChunk, @NonNullDecl Store<EntityStore> store, @NonNullDecl CommandBuffer<EntityStore> commandBuffer) {
+    public void tick(float dt, int index, @Nonnull ArchetypeChunk<EntityStore> archetypeChunk, @Nonnull Store<EntityStore> store, @Nonnull CommandBuffer<EntityStore> commandBuffer) {
         PlayerRef playerRef = archetypeChunk.getComponent(index, PlayerRef.getComponentType());
         if (playerRef == null) return;
 
@@ -116,6 +118,7 @@ public class ElevatorSystem extends EntityTickingSystem<EntityStore> {
         int playerZ = (int) Math.floor(pos.z);
 
         long chunkIndex = ChunkUtil.indexChunkFromBlock(playerX, playerZ);
+        // Prefer ticking chunks only (getChunkIfLoaded is deprecated forRemoval upstream).
         if (world.getChunkIfLoaded(chunkIndex) == null) {
             return;
         }
@@ -196,7 +199,7 @@ public class ElevatorSystem extends EntityTickingSystem<EntityStore> {
         if (!config.isEnableSound()) return;
 
         ensureSoundIndexInitialized();
-        if (teleportSoundIndex != Integer.MIN_VALUE) {
+        if (teleportSoundIndex != AssetMapWithIndexes.NOT_FOUND && teleportSoundIndex != SoundEvent.EMPTY_ID) {
             SoundUtil.playSoundEvent2dToPlayer(playerRef, teleportSoundIndex, SoundCategory.UI, 1.0F, 1.0F);
         }
     }
@@ -212,7 +215,7 @@ public class ElevatorSystem extends EntityTickingSystem<EntityStore> {
 
         BlockType block = world.getBlockType(x, y, z);
         if (block == null) return false;
-        return !block.getId().equalsIgnoreCase("empty");
+        return !block.getId().equalsIgnoreCase(BlockType.EMPTY_KEY);
     }
 
     private boolean isChunkLoaded(World world, int x, int z) {
@@ -248,7 +251,7 @@ public class ElevatorSystem extends EntityTickingSystem<EntityStore> {
         }
     }
 
-    @NullableDecl
+    @Nullable
     @Override
     public Query<EntityStore> getQuery() {
         return query;
