@@ -7,7 +7,7 @@ This file provides context and instructions for AI agents working on the EnderEl
 **EnderElevator** is a Hytale mod inspired by the "OpenBlocks Elevator". It allows players to teleport vertically between elevator blocks by jumping (up) or crouching (down).
 
 ### Technical Stack
-- **Game Version**: Hytale Pre-Release (Shared Source Sync 2026-09-03 / `pre-release` @ `9a7d692`). Manifest `ServerVersion` is SemverRange `*`.
+- **Game Version**: Hytale Pre-Release. Manifest `ServerVersion` is SemverRange `*`.
 - **Java Version**: 25
 - **Math Library**: JOML (`org.joml.Vector3d`)
 - **System Architecture**: ECS (Entity Component System)
@@ -55,7 +55,7 @@ long chunkIndex = ChunkUtil.indexChunkFromBlock(x, z);
 if (world.getChunkIfLoaded(chunkIndex) == null) return;
 ```
 Accessing blocks in non-ticking chunks during a tick cycle will crash the server.
-Note: `getChunkIfLoaded` / `getBlockType` are `@Deprecated(forRemoval = true)` on Sync 2026-09-03 but remain the supported readiness check for this mod until a chunk-ref migration.
+Note: `getChunkIfLoaded` / `getBlockType` are `@Deprecated(forRemoval = true)` on current pre-release servers but remain the supported readiness check for this mod until a chunk-ref migration.
 
 ### 3. Asset Indexing
 Hytale 2.0 registries load after plugin initialization. Always use **Lazy Loading** for sound indices:
@@ -69,7 +69,7 @@ Hytale 2.0 registries load after plugin initialization. Always use **Lazy Loadin
 - **Run**: Use the `HytaleServer` run configuration in IntelliJ.
 - **Assets**: Located in `src/main/resources`. `IncludesAssetPack` must be `true` in `manifest.json`.
 - **Debugging**: Enable Hytale Diagnostic Mode in game settings for UI/Asset errors.
-- **patchline**: `pre-release` when targeting Shared Source Sync 2026-09-03.
+- **patchline**: `pre-release` when targeting the current pre-release channel.
 
 ## 🗺 Roadmap 2.0
 - [x] ECS Modernization.
