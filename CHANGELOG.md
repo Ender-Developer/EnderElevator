@@ -3,6 +3,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+[1.1.6] - 2026-10-14
+
+### Compatibility Update
+
+* **Chunk API:** Updated for Hytale Update 7. Block lookups now read loaded chunk sections through `World.getChunkStore()` (`getChunkReference` / `getChunkSectionReferenceAtBlock` + `BlockSection`) instead of the removed `World.getChunkIfLoaded` / `World.getBlockType`.
+* **Behavior:** Elevators still only check chunks that are already loaded; unloaded sections are treated as missing (and as obstructed for headroom checks), same as before.
+
 [1.1.5] - 2026-09-06
 
 ### Compatibility Update

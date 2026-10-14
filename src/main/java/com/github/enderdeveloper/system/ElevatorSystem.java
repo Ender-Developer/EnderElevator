@@ -28,6 +28,8 @@ import com.hypixel.hytale.server.core.modules.entity.teleport.Teleport;
 import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.universe.world.SoundUtil;
 import com.hypixel.hytale.server.core.universe.world.World;
+import com.hypixel.hytale.server.core.universe.world.chunk.section.BlockSection;
+import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import org.joml.Vector3d;
 
@@ -118,12 +120,11 @@ public class ElevatorSystem extends EntityTickingSystem<EntityStore> {
         int playerZ = (int) Math.floor(pos.z);
 
         long chunkIndex = ChunkUtil.indexChunkFromBlock(playerX, playerZ);
-        // Prefer ticking chunks only (getChunkIfLoaded is deprecated forRemoval upstream).
-        if (world.getChunkIfLoaded(chunkIndex) == null) {
+        if (!isChunkLoaded(world, chunkIndex)) {
             return;
         }
 
-        BlockType currentBlock = world.getBlockType(playerX, playerY, playerZ);
+        BlockType currentBlock = getBlockType(world, playerX, playerY, playerZ);
         if (currentBlock == null || !isElevatorBlock(currentBlock.getId())) {
             return;
         }
@@ -163,7 +164,7 @@ public class ElevatorSystem extends EntityTickingSystem<EntityStore> {
             return false;
         }
 
-        BlockType targetBlock = world.getBlockType(x, y, z);
+        BlockType targetBlock = getBlockType(world, x, y, z);
 
         if (targetBlock != null && targetBlock.getId().equalsIgnoreCase(elevatorVariant)) {
             if (isObstructed(world, x, y + 1, z) || isObstructed(world, x, y + 2, z)) {
@@ -213,13 +214,39 @@ public class ElevatorSystem extends EntityTickingSystem<EntityStore> {
             return true;
         }
 
-        BlockType block = world.getBlockType(x, y, z);
+        BlockType block = getBlockType(world, x, y, z);
         if (block == null) return false;
         return !block.getId().equalsIgnoreCase(BlockType.EMPTY_KEY);
     }
 
     private boolean isChunkLoaded(World world, int x, int z) {
-        return world.getChunkIfLoaded(ChunkUtil.indexChunkFromBlock(x, z)) != null;
+        return isChunkLoaded(world, ChunkUtil.indexChunkFromBlock(x, z));
+    }
+
+    private boolean isChunkLoaded(World world, long chunkIndex) {
+        Ref<ChunkStore> chunkRef = world.getChunkStore().getChunkReference(chunkIndex);
+        return chunkRef != null && chunkRef.isValid();
+    }
+
+    /**
+     * Reads the block type at a position from already-loaded chunk data only.
+     *
+     * @return the block type, or {@code null} when the section is not loaded or the id is unknown
+     */
+    @Nullable
+    private BlockType getBlockType(World world, int x, int y, int z) {
+        ChunkStore chunkStore = world.getChunkStore();
+        Ref<ChunkStore> sectionRef = chunkStore.getChunkSectionReferenceAtBlock(x, y, z);
+        if (sectionRef == null || !sectionRef.isValid()) {
+            return null;
+        }
+
+        BlockSection blockSection = chunkStore.getStore().getComponent(sectionRef, BlockSection.getComponentType());
+        if (blockSection == null) {
+            return null;
+        }
+
+        return BlockType.getAssetMap().getAsset(blockSection.get(x, y, z));
     }
 
     private boolean containsIgnoreCase(String value, String expected) {
